@@ -211,7 +211,7 @@ export const pageQuestions = {
     ],
     [
       "Who is the founder?",
-      "Anuj Gupta founded GlobMitra, our virtual assistant company. Read <a href=\"#founder\">about his experience building teams and products</a> and how it shapes our approach."
+      "Anuj Gupta founded AssistLane Global, our virtual assistant company. Read <a href=\"#founder\">about his experience building teams and products</a> and how it shapes our approach."
     ],
     [
       "What kinds of work does the company cover?",
