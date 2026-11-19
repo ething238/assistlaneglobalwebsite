@@ -1,0 +1,16 @@
+# AssistLane Global: serve the generated static site from /dist when the repository
+# is deployed as a whole into public_html.
+Options -Indexes
+DirectoryIndex index.html
+RewriteEngine On
+
+# Keep explicit /dist URLs intact.
+RewriteRule ^dist/ - [L]
+
+# Serve the generated homepage and page/assets from dist/.
+RewriteRule ^$ dist/index.html [L]
+RewriteCond %{DOCUMENT_ROOT}/dist/$1 -f [OR]
+RewriteCond %{DOCUMENT_ROOT}/dist/$1 -d
+RewriteRule ^(.+)$ dist/$1 [L]
+
+ErrorDocument 404 /dist/404.html
