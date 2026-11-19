@@ -1,6 +1,6 @@
-# GlobMitra — Virtual Assistant Services
+# AssistLane Global — Virtual Assistant Services
 
-The GlobMitra website contains 33 HTML pages, its editable source modules, and local images, styles and interactions. The original layout was planned in the [design brief](https://docs.google.com/document/d/1O_Xmsa4ciOLrGJ3HWBRaBNjjSo4UxsiO144bAN-QaFU/edit?usp=sharing).
+The AssistLane Global website contains 33 HTML pages, its editable source modules, and local images, styles and interactions. The original layout was planned in the [design brief](https://docs.google.com/document/d/1O_Xmsa4ciOLrGJ3HWBRaBNjjSo4UxsiO144bAN-QaFU/edit?usp=sharing).
 
 Open `dist/index.html` in a browser. The draft has no runtime dependencies. To change page layouts, edit `build.mjs`; for service content and FAQs, edit `content.mjs`. Run `node build.mjs` to regenerate the HTML. The shared styles and interactions are in `dist/site.css` and `dist/site.js`.
 
