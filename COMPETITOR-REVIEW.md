@@ -63,7 +63,7 @@ MyOutDesk also displays its own reviews, client results and security certificati
 
 Each example uses fictional records and shows what a reviewer receives, which exceptions stay open and how the next person can take over.
 
-| GlobMitra page | Work the new guide demonstrates | Competitor references |
+| AssistLane Global page | Work the new guide demonstrates | Competitor references |
 | --- | --- | --- |
 | [Accounting and bookkeeping](dist/accounting-bookkeeping.html#worked-example) | Trace a marketplace payout, duplicate supplier bill and late refund through a month-end review. | [BELAY financial services](https://belaysolutions.com/services/financial) · [Wishup service catalogue](https://www.wishup.co/services) |
 | [Research and data](dist/research-data-support.html#worked-example) | Build a sourced comparison with consistent fields, conflicting evidence and questions for the reviewer. | [Time etc research support](https://www.timeetc.com/services/virtual-assistants-research) · [GlobalReach Assist services](https://globalreachassist.in/services/) |
