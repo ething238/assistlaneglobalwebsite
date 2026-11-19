@@ -1,0 +1,9 @@
+# AssistLane Global static HTML site
+Options -Indexes
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
+# Do not expose hidden files or repository metadata.
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
