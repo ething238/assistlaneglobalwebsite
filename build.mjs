@@ -753,7 +753,7 @@ for(const [file,fallbackTitle,fallbackDescription,originalBody] of pages){
  const body = settings ? applyPageSEO(originalBody, settings) : originalBody;
  const page=`<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="${siteName}: ${desc}"><meta property="og:site_name" content="${siteName}"><meta name="robots" content="${file === '404.html' ? 'noindex, nofollow' : 'index, follow'}"><link rel="canonical" href="https://assistlaneglobal.com/${file === 'index.html' ? '' : file}"><meta name="theme-color" content="#08162f">
+<meta name="description" content="${siteName}: ${desc}"><meta property="og:site_name" content="${siteName}"><meta property="og:title" content="${title}"><meta property="og:description" content="${siteName}: ${desc}"><meta property="og:type" content="website"><meta property="og:url" content="https://assistlaneglobal.com/${file === 'index.html' ? '' : file}"><meta name="twitter:card" content="summary"><meta name="robots" content="${file === '404.html' ? 'noindex, nofollow' : 'index, follow'}"><link rel="canonical" href="https://assistlaneglobal.com/${file === 'index.html' ? '' : file}"><meta name="theme-color" content="#08162f">
 <title>${title}</title>
 <link rel="icon" href="${mark}" type="image/svg+xml"><link rel="stylesheet" href="site.css?v=${styleVersion}"><script src="site.js?v=${scriptVersion}" defer></script></head>
 <body id="top">${header(file)}<main id="main" tabindex="-1">${body}${invitation(file)}</main>${footer(file)}</body></html>`;
