@@ -1,4 +1,4 @@
-# GlobMitra service and industry reference
+# AssistLane Global service and industry reference
 
 Updated 14 November 2026. Use the section links to find the work in the website preview. The catalogue includes 12 service playbooks and 11 industry playbooks.
 
