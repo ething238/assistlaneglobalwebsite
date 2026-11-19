@@ -23,7 +23,7 @@ const dir = new URL('./dist/',import.meta.url);
 await mkdir(dir,{recursive:true});
 const styleVersion = createHash('sha256').update(await readFile(new URL('site.css',dir))).digest('hex').slice(0,8);
 const scriptVersion = createHash('sha256').update(await readFile(new URL('site.js',dir))).digest('hex').slice(0,8);
-const siteName = 'GlobMitra';
+const siteName = 'AssistLane Global';
 const aboutLabel = `About ${siteName}`;
 const logo = await readFile(new URL('globmitra-mark.png',dir));
 const logoVersion = createHash('sha256').update(logo).digest('hex').slice(0,8);
@@ -45,7 +45,7 @@ const shapes = {
  people:'<circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2m2-15a3 3 0 0 1 0 6m1 3a4 4 0 0 1 3 4v2"/>'
 };
 const icon = (id,extra='')=>`<svg ${extra} aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${shapes[id]}</svg>`;
-const brand = `<span class="brand-mark" aria-hidden="true"><img src="${mark}" alt="" width="44" height="44" decoding="async"></span><img class="brand-wordmark" src="${wordmark}" alt="${siteName}" width="122" height="20" decoding="async">`;
+const brand = `<span class="brand-mark" aria-hidden="true"><img src="${mark}" alt="" width="44" height="44" decoding="async"></span><span class="brand-wordmark">${siteName}</span>`;
 const link = (url,label,cls='text-link')=>`<a class="${cls}" href="${url}">${label}${arrow}</a>`;
 const enquiryPageUrl = 'contact.html#contact-form';
 const enquiryLabel = 'Describe your task';
@@ -616,7 +616,7 @@ const about = hero({
    ${founderProfile}
    <div class="founder-bio">
     <p>Anuj joined Stryker as its first employee in India and built a 250-person IT organisation. He expanded Stryker’s research and development work in India and helped build teams that turned customer needs into products for global markets.</p>
-    <p>He brings that experience to GlobMitra, a virtual assistant company built around clear responsibilities and reliable handoffs. Our virtual assistant team starts with one recurring task, agrees who owns it and writes down when it needs review. Your professional virtual assistant gets clear instructions, and your team can check the result against the brief.</p>
+    <p>He brings that experience to AssistLane Global, a virtual assistant company built around clear responsibilities and reliable handoffs. Our virtual assistant team starts with one recurring task, agrees who owns it and writes down when it needs review. Your professional virtual assistant gets clear instructions, and your team can check the result against the brief.</p>
    </div>
   </div>`,'mint','founder')
  + section(intro('The roles behind the work.','The people involved depend on the workflow. During setup, agree who will handle the work, who checks it and who makes decisions when something falls outside scope.')+cards([
