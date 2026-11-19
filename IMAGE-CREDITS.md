@@ -47,7 +47,7 @@ The scene and subject instruction for each photo was:
 
 ## Brand artwork
 
-The GlobMitra logo is supplied artwork. The website uses a compact [symbol](dist/globmitra-mark.png) and [wordmark](dist/globmitra-wordmark.png) from the original composition.
+The AssistLane Global logo is supplied artwork. The website uses a compact [symbol](dist/assistlane-mark.png) and [wordmark](dist/assistlane-wordmark.png) from the original composition.
 
 ## Founder portrait
 
