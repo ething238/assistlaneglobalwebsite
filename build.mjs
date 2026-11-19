@@ -765,9 +765,9 @@ await writeFile(new URL('mark.svg',dir),`<svg xmlns="http://www.w3.org/2000/svg"
 const publicPages = pages.filter(([file]) => file !== '404.html');
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${publicPages.map(([file]) => `  <url><loc>https://assistlaneglobal.com/${file === 'index.html' ? '' : file}</loc></url>`).join('\\n')}
+${publicPages.map(([file]) => `  <url><loc>https://assistlaneglobal.com/${file === 'index.html' ? '' : file}</loc></url>`).join('\n')}
 </urlset>
 `;
 await writeFile(new URL('sitemap.xml',dir),sitemap);
-await writeFile(new URL('robots.txt',dir),'User-agent: *\\nAllow: /\\nDisallow: /404.html\\nSitemap: https://assistlaneglobal.com/sitemap.xml\\n');
+await writeFile(new URL('robots.txt',dir),'User-agent: *\nAllow: /\nDisallow: /404.html\nSitemap: https://assistlaneglobal.com/sitemap.xml\n');
 
