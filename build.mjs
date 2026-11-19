@@ -753,7 +753,7 @@ for(const [file,fallbackTitle,fallbackDescription,originalBody] of pages){
  const body = settings ? applyPageSEO(originalBody, settings) : originalBody;
  const page=`<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="${siteName}: ${desc}"><meta property="og:site_name" content="${siteName}"><meta name="robots" content="noindex, nofollow"><meta name="theme-color" content="#08162f">
+<meta name="description" content="${siteName}: ${desc}"><meta property="og:site_name" content="${siteName}"><meta name="robots" content="${file === '404.html' ? 'noindex, nofollow' : 'index, follow'}"><link rel="canonical" href="https://assistlaneglobal.com/${file === 'index.html' ? '' : file}"><meta name="theme-color" content="#08162f">
 <title>${title}</title>
 <link rel="icon" href="${mark}" type="image/svg+xml"><link rel="stylesheet" href="site.css?v=${styleVersion}"><script src="site.js?v=${scriptVersion}" defer></script></head>
 <body id="top">${header(file)}<main id="main" tabindex="-1">${body}${invitation(file)}</main>${footer(file)}</body></html>`;
@@ -762,3 +762,12 @@ for(const [file,fallbackTitle,fallbackDescription,originalBody] of pages){
   .replace(/srcset="([^"]+)"/g,(_, candidates)=>'srcset="'+candidates.split(', ').map(candidate=>'/'+candidate).join(', ')+'"'):page);
 }
 await writeFile(new URL('mark.svg',dir),`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 144"><title>${siteName}</title><image width="144" height="144" href="data:image/png;base64,${logo.toString('base64')}"/></svg>`);
+const publicPages = pages.filter(([file]) => file !== '404.html');
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${publicPages.map(([file]) => `  <url><loc>https://assistlaneglobal.com/${file === 'index.html' ? '' : file}</loc></url>`).join('\\n')}
+</urlset>
+`;
+await writeFile(new URL('sitemap.xml',dir),sitemap);
+await writeFile(new URL('robots.txt',dir),'User-agent: *\\nAllow: /\\nDisallow: /404.html\\nSitemap: https://assistlaneglobal.com/sitemap.xml\\n');
+
