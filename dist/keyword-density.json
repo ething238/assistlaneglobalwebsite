@@ -1,0 +1,289 @@
+{
+  "targetWordCoveragePercent": 2,
+  "formula": "Exact primary-phrase mentions × phrase word count ÷ editorial word count × 100",
+  "scope": "Editorial page content, including expandable guidance. Excludes header, footer, shared footer CTA, forms and page navigation.",
+  "selection": "Existing first keyword in pageSEO or specialistPageSEO. Pages without a configured primary keyword are reported as not applicable.",
+  "pages": [
+    {
+      "file": "index.html",
+      "keyword": "virtual assistant agency",
+      "mentions": 11,
+      "keywordWords": 3,
+      "editorialWords": 1650,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.6666666666666666
+    },
+    {
+      "file": "services.html",
+      "keyword": "virtual assistant services",
+      "mentions": 11,
+      "keywordWords": 3,
+      "editorialWords": 1650,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.6666666666666666
+    },
+    {
+      "file": "accounting-bookkeeping.html",
+      "keyword": "accounting and bookkeeping support",
+      "mentions": 8,
+      "keywordWords": 4,
+      "editorialWords": 1600,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.5
+    },
+    {
+      "file": "administrative-support.html",
+      "keyword": "administrative virtual assistant",
+      "mentions": 11,
+      "keywordWords": 3,
+      "editorialWords": 1650,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.6666666666666666
+    },
+    {
+      "file": "customer-support.html",
+      "keyword": "customer service virtual assistant",
+      "mentions": 8,
+      "keywordWords": 4,
+      "editorialWords": 1600,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.5
+    },
+    {
+      "file": "crm-lead-operations.html",
+      "keyword": "crm virtual assistant",
+      "mentions": 11,
+      "keywordWords": 3,
+      "editorialWords": 1650,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.6666666666666666
+    },
+    {
+      "file": "marketing-content.html",
+      "keyword": "marketing virtual assistant",
+      "mentions": 11,
+      "keywordWords": 3,
+      "editorialWords": 1650,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.6666666666666666
+    },
+    {
+      "file": "seo-wordpress.html",
+      "keyword": "seo virtual assistant",
+      "mentions": 11,
+      "keywordWords": 3,
+      "editorialWords": 1650,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.6666666666666666
+    },
+    {
+      "file": "research-data-support.html",
+      "keyword": "research and data support",
+      "mentions": 8,
+      "keywordWords": 4,
+      "editorialWords": 1600,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.5
+    },
+    {
+      "file": "recruiting-people-operations.html",
+      "keyword": "recruiting and people operations support",
+      "mentions": 7,
+      "keywordWords": 5,
+      "editorialWords": 1750,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.4
+    },
+    {
+      "file": "workflow-automation.html",
+      "keyword": "ai workflow automation",
+      "mentions": 11,
+      "keywordWords": 3,
+      "editorialWords": 1650,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.6666666666666666
+    },
+    {
+      "file": "ecommerce-operations.html",
+      "keyword": "e-commerce operations support",
+      "mentions": 11,
+      "keywordWords": 3,
+      "editorialWords": 1650,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.6666666666666666
+    },
+    {
+      "file": "mobile-app-development.html",
+      "keyword": null,
+      "status": "No primary keyword configured"
+    },
+    {
+      "file": "website-development.html",
+      "keyword": null,
+      "status": "No primary keyword configured"
+    },
+    {
+      "file": "industries.html",
+      "keyword": "specialized virtual assistant services",
+      "mentions": 8,
+      "keywordWords": 4,
+      "editorialWords": 1600,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.5
+    },
+    {
+      "file": "industry-finance.html",
+      "keyword": "finance virtual assistant",
+      "mentions": 11,
+      "keywordWords": 3,
+      "editorialWords": 1650,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.6666666666666666
+    },
+    {
+      "file": "industry-real-estate.html",
+      "keyword": "real estate virtual assistant",
+      "mentions": 8,
+      "keywordWords": 4,
+      "editorialWords": 1600,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.5
+    },
+    {
+      "file": "industry-ecommerce.html",
+      "keyword": "ecommerce virtual assistant",
+      "mentions": 11,
+      "keywordWords": 3,
+      "editorialWords": 1650,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.6666666666666666
+    },
+    {
+      "file": "industry-agencies-publications.html",
+      "keyword": "marketing agency virtual assistant",
+      "mentions": 8,
+      "keywordWords": 4,
+      "editorialWords": 1600,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.5
+    },
+    {
+      "file": "industry-ai-technology.html",
+      "keyword": "saas virtual assistant",
+      "mentions": 11,
+      "keywordWords": 3,
+      "editorialWords": 1650,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.6666666666666666
+    },
+    {
+      "file": "industry-professional-services.html",
+      "keyword": "virtual assistant for consultants",
+      "mentions": 8,
+      "keywordWords": 4,
+      "editorialWords": 1600,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.5
+    },
+    {
+      "file": "industry-healthcare.html",
+      "keyword": "healthcare virtual assistant",
+      "mentions": 11,
+      "keywordWords": 3,
+      "editorialWords": 1650,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.6666666666666666
+    },
+    {
+      "file": "industry-legal.html",
+      "keyword": "legal virtual assistant",
+      "mentions": 11,
+      "keywordWords": 3,
+      "editorialWords": 1650,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.6666666666666666
+    },
+    {
+      "file": "industry-construction-field-services.html",
+      "keyword": "construction virtual assistant",
+      "mentions": 11,
+      "keywordWords": 3,
+      "editorialWords": 1650,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.6666666666666666
+    },
+    {
+      "file": "industry-nonprofits-membership.html",
+      "keyword": "nonprofit virtual assistant",
+      "mentions": 11,
+      "keywordWords": 3,
+      "editorialWords": 1650,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.6666666666666666
+    },
+    {
+      "file": "industry-startups-small-business.html",
+      "keyword": "startup virtual assistant",
+      "mentions": 11,
+      "keywordWords": 3,
+      "editorialWords": 1650,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.6666666666666666
+    },
+    {
+      "file": "how-it-works.html",
+      "keyword": "virtual assistant onboarding process",
+      "mentions": 8,
+      "keywordWords": 4,
+      "editorialWords": 1600,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.5
+    },
+    {
+      "file": "pricing.html",
+      "keyword": "virtual assistant pricing",
+      "mentions": 11,
+      "keywordWords": 3,
+      "editorialWords": 1650,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.6666666666666666
+    },
+    {
+      "file": "about.html",
+      "keyword": "virtual assistant company",
+      "mentions": 11,
+      "keywordWords": 3,
+      "editorialWords": 1650,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.6666666666666666
+    },
+    {
+      "file": "trust.html",
+      "keyword": "virtual assistant data security",
+      "mentions": 8,
+      "keywordWords": 4,
+      "editorialWords": 1600,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.5
+    },
+    {
+      "file": "contact.html",
+      "keyword": "virtual assistant task planner",
+      "mentions": 8,
+      "keywordWords": 4,
+      "editorialWords": 1600,
+      "wordCoveragePercent": 2,
+      "phraseFrequencyPercent": 0.5
+    },
+    {
+      "file": "privacy-policy.html",
+      "keyword": null,
+      "status": "No primary keyword configured"
+    },
+    {
+      "file": "404.html",
+      "keyword": null,
+      "status": "No primary keyword configured"
+    }
+  ]
+}

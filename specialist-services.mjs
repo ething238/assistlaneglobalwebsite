@@ -50,11 +50,11 @@ export const specialistServices = [
       {
         id: 'accounting-workflows',
         title: 'What a bookkeeping virtual assistant does each week',
-        intro: 'Choose the records, reporting cycle and review owner before starting. The same bookkeeping virtual assistant can handle routine work across several queues when the approval rules are clear.',
+        intro: 'Define the records, reporting cycle, software access and finance reviewer before starting.',
         items: [
-          ['Daily and weekly records', 'Capture bills and receipts, log transactions, update invoice status and prepare follow-ups. Use a shared queue to show which records still need supporting documents. See <a href="industry-finance.html#worked-example">how finance teams handle invoice exceptions</a>.'],
-          ['Month-end and year-end preparation', 'Collect statements and payroll summaries, prepare reconciliations and assemble draft reports. Track outstanding documents and corrections in one checklist for the accountant. For online stores, see <a href="industry-ecommerce.html#store-catalogue-and-fulfilment">how payout and fee records are prepared</a>.'],
-          ['Work with your finance specialist', 'Organise schedules and source files for tax preparation, payroll review, inventory reporting, a controller review or a CFO planning session. Agree separately who has the qualifications and authority to provide tax, financial planning or sign-off.']
+          ['Daily and weekly records', 'Capture bills and receipts, record approved transactions and track missing documents. Review <a href="industry-finance.html#worked-example">invoice exceptions</a> with your finance owner.'],
+          ['Month-end and year-end preparation', 'Collect statements, prepare reconciliations and assemble draft reports. Track missing evidence in one checklist. Review <a href="industry-ecommerce.html#store-catalogue-and-fulfilment">store payouts and fees</a> before close.'],
+          ['Work with your finance specialist', 'Organise source records for payroll, tax or controller review. Financial advice and final approval stay with your authorised specialist.']
         ]
       }
     ],

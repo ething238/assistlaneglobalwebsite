@@ -14,16 +14,22 @@ import { specialistGuides } from './specialist-guides.mjs';
 import { serviceDetails, industryDetails } from './catalogue-details.mjs';
 import { pageSEO } from './seo.mjs';
 import { specialistPageSEO } from './specialist-seo.mjs';
-import { applyPageSEO } from './seo-copy.mjs';
+import { countPageWords, seoOverrides } from './page-limits.mjs';
+import { web3formsAccessKey } from './form-config.mjs';
+import { prepareEditorialPage, countEditorialWords, editorialWordTokens } from './editorial-pages.mjs';
+import { keywordMetrics } from './editorial-keywords.mjs';
 
-const services = [...coreServices, ...specialistServices, ...developmentServices];
+const allServices = [...coreServices, ...specialistServices, ...developmentServices];
+const services = [...allServices.filter(service=>service.id==='accounting-bookkeeping'), ...allServices.filter(service=>service.id!=='accounting-bookkeeping')];
 const industries = [...coreIndustries, ...specialistIndustries];
 
 const dir = new URL('./dist/',import.meta.url);
 await mkdir(dir,{recursive:true});
 const styleVersion = createHash('sha256').update(await readFile(new URL('site.css',dir))).digest('hex').slice(0,8);
-const scriptVersion = createHash('sha256').update(await readFile(new URL('site.js',dir))).digest('hex').slice(0,8);
+const scriptVersion = createHash('sha256').update(await readFile(new URL('site.js',dir))).update(await readFile(new URL('form-delivery.js',dir))).digest('hex').slice(0,8);
 const siteName = 'AssistLane Global';
+const contactEmail = 'support@assistlaneglobal.com';
+const contactPhone = '+91 7011956780';
 const aboutLabel = `About ${siteName}`;
 const logo = await readFile(new URL('globmitra-mark.png',dir));
 const logoVersion = createHash('sha256').update(logo).digest('hex').slice(0,8);
@@ -46,9 +52,9 @@ const shapes = {
 };
 const icon = (id,extra='')=>`<svg ${extra} aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${shapes[id]}</svg>`;
 const brand = `<span class="brand-mark" aria-hidden="true"><img src="${mark}" alt="" width="44" height="44" decoding="async"></span><span class="brand-wordmark">${siteName}</span>`;
-const link = (url,label,cls='text-link')=>`<a class="${cls}" href="${url}">${label}${arrow}</a>`;
+const link = (url,label,cls='text-link')=>`<a class="${cls}" href="${url}">${label}</a>`;
 const enquiryPageUrl = 'contact.html#contact-form';
-const enquiryLabel = 'Describe your task';
+const enquiryLabel = 'Get in touch';
 const enquiryAnchor = '#enquiry';
 const companyHeroForms = new Set(['index.html', 'about.html']);
 const privacyPolicyUrl = 'privacy-policy.html';
@@ -77,23 +83,39 @@ const cardIconRules = [
 ];
 const cardIcon = title => cardIconRules.find(([,pattern])=>pattern.test(title))?.[0] || 'content';
 const cardHeading = (title,symbol=cardIcon(title),level='h3')=>`<div class="card-heading"><span class="card-icon">${icon(symbol)}</span><${level}>${title}</${level}></div>`;
+const contactLinks = (className='')=>`<address class="contact-details ${className}" aria-label="${siteName} contact details">
+ <a href="mailto:${contactEmail}"><span>Email</span><strong>${contactEmail}</strong></a>
+ <a href="tel:${contactPhone.replace(/\s/g,'')}"><span>Phone</span><strong>${contactPhone}</strong></a>
+</address>`;
 
-function enquiryForm(){
- return `<form class="enquiry" id="enquiry" method="post" aria-labelledby="enquiry-title" tabindex="-1">
- <div class="card-heading"><span class="card-icon">${icon('mail')}</span><h2 id="enquiry-title">Tell us what you need</h2></div>
- <div class="field"><label for="enquiry-name">Name</label><input id="enquiry-name" name="name" type="text" autocomplete="name" required></div>
- <div class="field"><label for="enquiry-company">Company name</label><input id="enquiry-company" name="company" type="text" autocomplete="organization" required></div>
- <div class="field"><label for="enquiry-email">Email</label><input id="enquiry-email" name="email" type="email" autocomplete="email" required></div>
- <div class="field"><label for="enquiry-phone">Phone number</label><input id="enquiry-phone" name="phone" type="tel" autocomplete="tel" required></div>
- <div class="field field-wide"><label for="enquiry-description">Description</label><textarea id="enquiry-description" name="description" rows="3" maxlength="2000" placeholder="Describe the task and the result you want." required></textarea></div>
- <button class="button primary" type="submit" disabled>Submit enquiry ${arrow}</button>
- <p class="enquiry-status" role="status"></p>
- <noscript><p>Enable JavaScript to use this form.</p></noscript>
+function enquiryForm(serviceId=''){
+ const selected = ({'administrative-support':'Virtual assistant','accounting-bookkeeping':'Bookkeeping','customer-support':'Customer support','crm-lead-operations':'CRM and sales','marketing-content':'Marketing and content','seo-wordpress':'Marketing and content'})[serviceId] || (serviceId ? 'Other support' : 'Virtual assistant');
+ return `<form class="enquiry" id="enquiry" data-enquiry-form action="https://api.web3forms.com/submit" method="post" aria-labelledby="enquiry-title" tabindex="-1">
+ <h2 id="enquiry-title">Discuss your requirement</h2>
+ <input type="hidden" name="access_key" value="${web3formsAccessKey}">
+ <input type="hidden" name="from_name" value="AssistLane Global website">
+ <input type="hidden" name="subject" value="AssistLane Global website enquiry">
+ <fieldset class="enquiry-fields"><legend class="visually-hidden">Contact details and requirements</legend>
+ <div class="field"><label for="enquiry-name">Full name *</label><input id="enquiry-name" name="name" type="text" autocomplete="name" placeholder="Your name" maxlength="100" pattern=".*\\S.*" required></div>
+ <div class="field"><label for="enquiry-email">Work email *</label><input id="enquiry-email" name="email" type="email" autocomplete="email" placeholder="you@company.com" maxlength="254" required></div>
+ <div class="field"><label for="enquiry-phone">Phone number (optional)</label><input id="enquiry-phone" name="phone" type="tel" autocomplete="tel" placeholder="Country code + number" maxlength="30" pattern="\\+?[0-9\\s\\-\\(\\).]{7,25}"></div>
+ <div class="field"><label for="enquiry-service">Support needed</label><select id="enquiry-service" name="service">${['Bookkeeping','Virtual assistant','Customer support','CRM and sales','Marketing and content','Other support'].map(label=>`<option${selected===label?' selected':''}>${label}</option>`).join('')}</select></div>
+ <div class="field field-wide"><label for="enquiry-description">What do you need? *</label><textarea id="enquiry-description" name="description" rows="2" maxlength="2000" placeholder="Your tasks, current tools and preferred start date" required></textarea></div>
+ <details class="enquiry-optional field-wide"><summary>Add optional details <span aria-hidden="true">+</span></summary><div class="enquiry-optional-fields">
+ <div class="field field-wide"><label for="enquiry-company">Company (optional)</label><input id="enquiry-company" name="company" type="text" autocomplete="organization" maxlength="150"></div>
+ <div class="field"><label for="enquiry-start">Preferred start date</label><input id="enquiry-start" name="startDate" type="date"></div>
+ <div class="field"><label for="enquiry-timezone">Time zone</label><input id="enquiry-timezone" name="timeZone" type="text" placeholder="e.g. IST or GMT" maxlength="100"></div>
+ </div></details>
+ <div class="form-honeypot" aria-hidden="true"><label for="enquiry-botcheck">Leave empty</label><input id="enquiry-botcheck" name="botcheck" type="text" tabindex="-1" autocomplete="off"></div>
+ <label class="enquiry-consent field-wide"><input name="consent" type="checkbox" value="agreed" required><span>I agree to be contacted about my enquiry and have read the <a href="${privacyPolicyUrl}">Privacy Policy</a>.</span></label>
+ <button class="button primary field-wide" type="submit"${web3formsAccessKey ? '' : ' disabled'}>Send enquiry</button>
+ </fieldset>
+ <p class="enquiry-status" role="status" aria-live="polite"></p>
  </form>`;
 }
 
 const cards=(items,cls='')=>`<div class="card-grid ${cls}">${items.map(([h,p,symbol])=>`<article class="simple-card">${cardHeading(h,symbol)}<p>${p}</p></article>`).join('')}</div>`;
-const steps=items=>`<ol class="steps">${items.map(([h,p],i)=>`<li><span class="step-number">${String(i+1).padStart(2,'0')}</span>${cardHeading(h)}<p>${p}</p></li>`).join('')}</ol>`;
+const steps=(items,level='h3')=>`<ol class="steps">${items.map(([h,p],i)=>`<li><span class="step-number">${String(i+1).padStart(2,'0')}</span>${cardHeading(h,cardIcon(h),level)}<p>${p}</p></li>`).join('')}</ol>`;
 const faq=(items,id='')=>{
  if (items.length<6) throw new Error('FAQ sections need at least six questions.');
  return section(intro('Frequently Asked Questions')+`<div class="faq-list">${items.map(([q,a])=>`<details><summary>${q}<span aria-hidden="true"></span></summary><p>${a}</p></details>`).join('')}</div>`,'',id);
@@ -103,8 +125,8 @@ const invitation=(page)=>{
  return `<section class="footer-cta" id="footer-cta" aria-labelledby="footer-cta-title">
  <img class="footer-cta-image" src="footer-workspace.webp" srcset="footer-workspace-800.webp 800w, footer-workspace.webp 1600w" sizes="100vw" width="1600" height="683" alt="" loading="lazy" decoding="async">
  <div class="wrap footer-cta-content">
-  <h2 id="footer-cta-title">Make room for <em>the work only you can do.</em></h2>
-  <p class="footer-cta-copy">Tell us which task you’d like to hand off and what a good result looks like. Start with one piece of work that comes up regularly.</p>
+  <h2 id="footer-cta-title">Let’s make your day easier.</h2>
+  <p class="footer-cta-copy">Tell us what you need help with. We’ll discuss a simple starting point.</p>
   ${link(url,enquiryLabel,'button footer-cta-button')}
  </div>
 </section>`;
@@ -251,63 +273,52 @@ function detailedWorkflow(guide, icons, renderIntro = intro) {
 
 function header(page){
  const chevron = '<svg aria-hidden="true" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor"><path d="m3 6 5 5 5-5"/></svg>';
+ const menuServices = [['administrative-support','Admin support'],['accounting-bookkeeping','Bookkeeping'],['customer-support','Customer support'],['crm-lead-operations','Sales and CRM'],['marketing-content','Marketing and content']];
  const enquiryUrl = companyHeroForms.has(page) ? enquiryAnchor : enquiryPageUrl;
  return `<a class="skip" href="#main">Skip to content</a><header class="site-header"><div class="wrap header-row">
   <a class="brand" href="index.html" aria-label="${siteName} home">${brand}</a>
   <button class="mobile-menu" type="button" aria-expanded="false" aria-controls="navigation">Menu <span aria-hidden="true">☰</span></button>
   <nav id="navigation" class="navigation" aria-label="Main navigation">
    ${nav('index.html','Home',page)}
-   ${nav('about.html','About Us',page)}
    <details class="nav-dropdown services-menu" name="primary-navigation">
     <summary aria-controls="services-dropdown">Services ${chevron}</summary>
     <div class="menu-panel" id="services-dropdown">
-     <div class="menu-grid">${services.map(s=>`<a href="${serviceURL(s)}"${page===serviceURL(s)?' aria-current="page"':''}>${icon(s.icon)}<span><strong>${s.title}</strong><small>${s.tasks[0]}</small></span></a>`).join('')}</div>
+     <div class="simple-service-menu">${menuServices.map(([id,label])=>nav(id+'.html',label,page)).join('')}</div>
      ${link('services.html','View all services')}
     </div>
    </details>
-   <details class="nav-dropdown industries-menu" name="primary-navigation">
-    <summary aria-controls="industries-dropdown">Industries ${chevron}</summary>
-    <div class="menu-panel" id="industries-dropdown">
-     <div class="menu-grid">${industries.map(industry=>`<a href="${industryURL(industry)}"${page===industryURL(industry)?' aria-current="page"':''}>${icon(industry.icon)}<span><strong>${industry.name}</strong><small>${industry.tasks[0]}</small></span></a>`).join('')}</div>
-     ${link('industries.html','View all industries')}
-    </div>
-   </details>
-   ${nav('how-it-works.html','How it works',page)}${nav('pricing.html','Pricing',page)}${nav('trust.html','Trust',page)}
+   ${nav('how-it-works.html','How it works',page)}${nav('about.html','About Us',page)}${nav('pricing.html','Pricing',page)}
    <a class="mobile-contact" href="${enquiryUrl}">${enquiryLabel}</a>
   </nav><div class="header-cta">${call(enquiryUrl)}</div></div></header>`;
 }
 const footer=(page)=>`<footer class="site-footer" id="site-footer"><div class="wrap"><div class="footer-grid">
  <div class="footer-brand">
   <a class="brand" href="index.html" aria-label="${siteName} home">${brand}</a>
-  <p>${siteName} provides virtual assistants for executive support, customer service, sales and social media. Our specialist services cover bookkeeping, research, recruiting, automation, e-commerce, and mobile app and website development.</p>
-  <p>Start with one recurring task. We’ll agree who owns it, what a finished result looks like and which decisions stay with your team.</p>
+  <p>Virtual assistant support for the everyday work around your business.</p>
+  ${contactLinks('footer-contact')}
  </div>
  <nav class="footer-column" aria-label="Services">
   <p class="footer-title">Services</p>
-  <div class="footer-links">${nav('services.html','All services',page)}${services.map(s=>nav(serviceURL(s),s.label,page)).join('')}</div>
+  <div class="footer-links">${nav('administrative-support.html','Admin support',page)}${nav('accounting-bookkeeping.html','Bookkeeping',page)}${nav('customer-support.html','Customer support',page)}${nav('crm-lead-operations.html','Sales and CRM',page)}${nav('marketing-content.html','Marketing and content',page)}${nav('services.html','View all services',page)}</div>
  </nav>
- <nav class="footer-column" aria-label="Industries">
-  <p class="footer-title">Industries</p>
-  <div class="footer-links">${nav('industries.html','All industries',page)}${industries.map(industry=>nav(industryURL(industry),industry.name,page)).join('')}</div>
- </nav>
- <nav class="footer-column footer-company" aria-label="Company">
+ <nav class="footer-column" aria-label="Company">
   <p class="footer-title">Company</p>
-  <div class="footer-links">${nav('index.html','Home',page)}${nav('about.html',aboutLabel,page)}${nav('how-it-works.html','How it works',page)}${nav('pricing.html','Pricing',page)}${nav('trust.html','Trust and security',page)}${nav(privacyPolicyUrl,'Privacy Policy',page)}</div>
+  <div class="footer-links">${nav('about.html','About us',page)}${nav('how-it-works.html','How it works',page)}${nav('pricing.html','Pricing',page)}${nav('industries.html','Industries',page)}${nav('trust.html','Trust and security',page)}${nav(privacyPolicyUrl,'Privacy Policy',page)}</div>
  </nav>
  </div><div class="footer-utility">
   ${link(enquiryPageUrl,enquiryLabel,'footer-action')}
   <a href="#top">Back to top <span aria-hidden="true">↑</span></a>
  </div></div></footer>`;
 
-function hero({title,copy,visual='',tone='warm',secondary='',home=false,action=true,showEnquiryForm=false,backdrop=''}){
+function hero({title,copy,visual='',tone='warm',secondary='',home=false,action=true,showEnquiryForm=false,backdrop='',details='',enquiryService=''}){
  const background = backdrop ? photoBackdrop(backdrop, true) : '';
- const panel = showEnquiryForm ? enquiryForm() : visual;
+ const panel = showEnquiryForm ? enquiryForm(enquiryService) : visual;
  const enquiryAction = action && !showEnquiryForm ? call() : '';
  const actions = enquiryAction + secondary;
  const paragraphs = Array.isArray(copy) ? copy : [copy];
  const description = paragraphs.filter(Boolean).map(paragraph=>`<p class="lead">${paragraph}</p>`).join('');
  return `<section class="hero ${tone}${home ? ' home-hero' : ''}${backdrop ? ' photo-background' : ''}">${background}<div class="wrap ${panel?'split hero-grid':'compact-hero'}">
-   <div class="hero-copy"><h1>${title}</h1>${description}
+   <div class="hero-copy"><h1>${title}</h1>${description}${details}
    ${actions?`<div class="actions">${actions}</div>`:''}</div>${panel}
  </div></section>`;
 }
@@ -417,37 +428,46 @@ const industryCards=()=>`<div class="industry-grid">${industries.map(industry=>`
 const tabSamples=()=>`<div class="tabs"><div class="tab-controls" role="tablist" aria-label="Example workflows">${services.map((s,i)=>`<button type="button" role="tab" id="sample-tab-${i}" aria-controls="sample-panel-${i}" aria-selected="${i===0}" tabindex="${i===0?'0':'-1'}">${s.tabLabel || ['Admin','Support','CRM','Social','Web'][i]}</button>`).join('')}</div>
 ${services.map((s,i)=>`<div role="tabpanel" tabindex="0" id="sample-panel-${i}" aria-labelledby="sample-tab-${i}"${i?' hidden':''}>${sample(s.sample)}${link(serviceURL(s),'See the '+serviceLabel(s)+' playbook')}</div>`).join('')}</div>`;
 
+const homeServices = [
+ ['administrative-support','Admin and scheduling','Inbox management, calendars, meeting notes and everyday follow-ups.'],
+ ['customer-support','Customer support','Help with enquiries, routine responses and open customer requests.'],
+ ['crm-lead-operations','Sales and CRM','Keep contact records current and sales follow-ups on track.'],
+ ['marketing-content','Marketing and content','Coordinate approved content, publishing and campaign tasks.'],
+ ['research-data-support','Research and data','Organise information, update records and prepare useful summaries.'],
+ ['website-development','Website support','Get help with agreed website updates and technical tasks.']
+];
 const homepage=hero({
- title:'Virtual assistants <em>for everyday business support.</em>',
- copy:[
-  'Find a virtual assistant for entrepreneurs and growing teams. We handle inboxes, calendars, customer enquiries, sales follow-ups and social publishing.',
-  'Our professional virtual assistant services can begin with a daily inbox brief, a queue of customer replies or a weekly lead report. You decide which requests need your approval.',
-  'Our virtual assistant agency can also scope specialist support for bookkeeping, recruiting and workflow automation, or help you plan a new website or mobile app.'
- ],
+ title:'<em>Virtual assistants</em> for your growing business.',
+ copy:'Get help with your inbox, calendar, customers and everyday tasks. Tell us what takes up your time, and we’ll agree a practical way to help.',
  showEnquiryForm:true,
- secondary:link('#workflow-lab','See the work in action','button primary'),
+ secondary:link('services.html','Explore services'),
  home:true
 })
- + section(serviceStrip(),'','service-strip')
- + section(inboxSavings(),'sky','inbox-savings')
- + section(intro('Find the right service for your workload.','Start with the recurring task that causes the most friction. Each playbook shows the work, the outputs and the decisions that stay with your team.')+serviceCards(),'','service-map')
- + section(`<div class="split align-center"><div>${intro('See how support fits your business.','Explore industry workflows from finance and e-commerce to healthcare practices, property teams and startups.')}${link('industries.html','Explore industries','button secondary')}</div>${photo('operations')}</div>`,'mint')
- + section(intro('Inspect the work before you delegate it.','Switch between sample outputs to see what you get back and which decisions stay with you.')+`<div class="split lab-layout">${assistantFlowGraphic()}<div class="lab-tabs">${tabSamples()}${link('how-it-works.html','Read the delivery process')}</div></div>`,'dark-section','workflow-lab')
- + section(intro('What the work looks like over a week.','A sample schedule for a team handing off several workflows. Actual coverage, volume and review times are scoped with each engagement.')+matrix(['Cadence','Work in scope','What you review'],sampleSchedules),'','cadence')
- + section(intro('Keep decisions with the right people.')+cards([['Scoped access','Start with the minimum account permissions the task needs. Record the tool, role and approval before giving access.'],['Approval gates','Define what the assistant can handle independently and what needs sign-off, from refunds to live website changes.'],['Continuity','Keep instructions, work history and unresolved decisions in a shared place so someone else can take over when needed.']])+link('trust.html','Explore trust and security'),'mint')
- + section(intro('Get one workflow right first.')+steps([process[0],['Run a trial handoff','Document inputs, quality checks and decision limits. Review a sample before granting further access.'],['Set the operating rhythm','Agree the queue, reporting schedule, and how to handle out-of-scope or urgent work.']])+link('how-it-works.html','See the full onboarding sequence'),'warm','first-workflow','planning')
- + section(`<div class="split align-center"><div>${intro('Know what you’re buying.','A comparable scope spells out expected volumes, coverage hours, review time and what changes the cost. Use those details to assess capacity before committing.')}</div><div class="section-action">${link('pricing.html','See how pricing is scoped','button secondary')}</div></div>`)
- + editorialGuide(siteGuides.home)
- + section(`<div class="founder-layout founder-preview">
-   <div>${intro('Meet our founder')}${link('about.html#founder','Read Anuj’s story')}</div>
-   ${founderProfile}
-  </div>`,'mint','meet-the-founder')
- + faq(questions);
+ + section(intro('What can we help with?','Choose the support you need. Start with one task or a regular workload.')+`<div class="home-services-grid">${homeServices.map(([id,title,copy])=>`<a class="home-service" href="${id}.html"><h3>${title}</h3><p>${copy}</p></a>`).join('')}</div>`+link('services.html','View all services'),'','home-services')
+ + section(photoIntro(intro('Bookkeeping, kept organised.','Keep invoices, expenses and financial records ready for review.')+list([
+   'Transaction records and receipts',
+   'Supplier invoices and customer billing',
+   'Bank reconciliations and month-end preparation'
+ ])+'<p class="bookkeeping-note">We prepare the records and flag missing information. Financial approvals stay with your team.</p>'+link('accounting-bookkeeping.html','Explore bookkeeping'),'records'),'sky','bookkeeping')
+ + section(intro('Getting started is simple.')+cards([
+   ['Tell us what you need','Share the task, your current tools and when you need support.'],
+   ['Agree the details','We confirm the scope, schedule, access and person who will review the work.'],
+   ['Stay up to date','Receive the agreed updates, review results and adjust the workload as needed.']
+ ])+link('how-it-works.html','How it works'),'','first-workflow')
+ + section(`<div class="founder-layout founder-preview"><div>${intro('People you can work with.','AssistLane Global supports founders and growing teams with clear responsibilities, agreed instructions and regular updates. Founder Anuj Gupta brings more than 25 years of experience building teams and products.')}${link('about.html','About AssistLane Global')}${link('trust.html','How we handle access')}</div>${founderProfile}</div>`,'','meet-the-founder')
+ + faq([
+   ['What can I delegate?','Start with admin, customer enquiries, CRM updates, research or content coordination. The Services page has the full range.'],
+   ['Can I start with one task?','Yes. Agree one recurring task, the expected result and how you will review it.'],
+   ['Can you use my existing tools?','We plan the work around your approved tools and the access you authorise.'],
+   ['How will I get updates?','Agree an update schedule and a shared place for completed work, questions and next actions.'],
+   ['What access will you need?','Only the access agreed for the task. Decisions outside your instructions come back to your authorised reviewer.'],
+   ['How do I get started?','Email or call us with the task you want help with. We’ll discuss the scope and next steps.']
+ ]);
 
 const servicesPage=hero({
  title:'Virtual assistant services',
  copy:[
-  'Choose outsourced administrative services for your inbox and calendar, bring in customer or CRM support, or hand off recurring social media and bookkeeping work.',
+  'Choose support for the everyday work around your business, including administration, customer enquiries, sales, content and organised financial records.',
   'Before you hire a virtual assistant, decide what you want to review. Compare our virtual assistant services by the result they deliver, from a prioritised inbox to an updated sales pipeline or a reconciliation report.'
  ],
  showEnquiryForm:true
@@ -491,9 +511,9 @@ function servicePage(s){
  const [scopePhoto, samplePhoto] = servicePhotos[s.id];
  const backdrop = [scopePhoto, samplePhoto].includes('operations') ? 'team' : 'operations';
  return hero({
-  title:p.title || s.title,copy:p.copy,tone:'service-hero',
+  title:p.title || s.title,copy:s.id==='accounting-bookkeeping' ? ['Keep invoices, expenses, bank reconciliations and month-end records ready for your finance reviewer.', ...p.copy.slice(1)] : p.copy,tone:'service-hero',
   secondary:link('#scope','Explore the scope','button primary'),
-  showEnquiryForm:true
+  showEnquiryForm:true,enquiryService:s.id
  })
  + section(photoIntro(intro(scope.title,scope.intro),scopePhoto)+matrix(['Workstream',scope.workColumn,'What you get','Your approval'],p.matrix),'','scope')
  + catalogueSections(s.details || serviceDetails[s.id])
@@ -510,7 +530,7 @@ const industryDirectory = hero({
  title:'Virtual assistant support by industry',
  copy:[
   'Compare virtual assistant services by industry and see how the work changes from one sector to the next.',
-  'Our specialized virtual assistant services can help a property team book viewings, an online store manage returns or a consultancy collect client records. Open the industry closest to your work to see the tasks, tools and approvals involved, and choose a workflow to start with.'
+  'Match the support to your working day, from store enquiries and client appointments to research, publishing and record updates. Agree the tools, responsibilities and decisions that matter to your team.'
  ],
  tone:'service-hero industry-hero',
  secondary:link('#industry-directory','Compare industries','button primary'),
@@ -546,7 +566,8 @@ const industryDirectory = hero({
  + faq(pageQuestions.industries,'industry-faq');
 
 function industryPage(industry) {
- const related = industry.services.map(id=>services.find(service=>service.id===id));
+ const industryServices = ['finance','ecommerce','professional-services','startups-small-business'].includes(industry.id) ? ['accounting-bookkeeping', ...industry.services.filter(id=>id!=='accounting-bookkeeping')] : industry.services;
+ const related = industryServices.map(id=>services.find(service=>service.id===id));
  const guide = industryGuides[industry.id] || specialistGuides[industry.id];
  const [scopePhoto, samplePhoto] = industryPhotos[industry.id];
  const backdrop = [scopePhoto, samplePhoto].includes('operations') ? 'team' : 'operations';
@@ -573,9 +594,9 @@ function industryPage(industry) {
  + faq(industry.faq,'sector-faq');
 }
 
-const how = hero({title:'How it works',copy:'Start with a clear scope, test a small handoff and decide how everyday work gets assigned, reviewed and improved.',visual:`<div class="hero-panel mint">${steps([['Discover','Choose the first workflow.'],['Onboard','Agree instructions and access.'],['Review','Check the result together.']])}</div>`})
+const how = hero({title:'How it works',copy:'Start with a clear scope, test a small handoff and decide how everyday work gets assigned, reviewed and improved.',visual:`<div class="hero-panel mint">${steps([['Discover','Choose the first workflow.'],['Onboard','Agree instructions and access.'],['Review','Check the result together.']],'strong')}</div>`})
  + section(intro('What happens at each stage')+`<ol class="timeline">${process.map(([h,p],i)=>`<li><span class="step-number">0${i+1}</span><div>${cardHeading(h)}<p>${p}</p></div></li>`).join('')}</ol>`)
- + section(intro('Start with a daily brief.','Share a few examples and review a draft before approving replies or calendar changes.')+`<div class="split lab-layout with-photo">${photo('operations')}${sample(services[0].sample)}</div>`,'dark-section')
+ + section(intro('Start with a daily brief.','Share a few examples and review a draft before approving replies or calendar changes.')+`<div class="split lab-layout with-photo">${photo('operations')}${sample(services.find(service=>service.id==='administrative-support').sample)}</div>`,'dark-section')
  + section(intro('Make each decision easy to route.')+cards([['You provide','Priorities, authorised access, source information and a named person for approvals.'],['Delivery owner','Written task instructions, an agreed work log, questions and exceptions that need a decision.'],['Review together','Check completed work, update the instructions and decide how to handle changes or absences.']])+link('trust.html#access','Plan access and approvals'),'','decision-owners','planning')
  + section(intro('Know what to review and when.')+matrix(['Cadence','Work in scope','What you review'],sampleSchedules),'warm')
  + section(`<div class="split align-center"><div>${intro('Decide whether to expand the scope.')}${list(['Compare the result with the example you provided. Note any changes needed to tone, format or accuracy.','Check whether routine work could proceed and whether exceptions reached the right person.','Update the instructions, coverage and permissions before adding another queue or system.'])}</div>${photo('team')}</div>`)
@@ -603,7 +624,7 @@ const pricing = hero({title:'Pricing for the work you need',copy:'Use discovery 
 const about = hero({
  title:aboutLabel,
  copy:[
-  `${siteName} is a virtual assistant company for founders and teams with recurring work to hand off. We support executive admin, customer enquiries, sales follow-ups, social publishing and bookkeeping. We also build websites and mobile apps when an engagement calls for development.`,
+  `${siteName} provides virtual assistant support for founders and growing teams. We keep financial records organised and help with executive admin, customer enquiries, sales follow-ups and social publishing.`,
   'Founder Anuj Gupta brings more than 25 years of experience building teams and launching products. He applies that experience to how we scope work, assign responsibilities and check the result.',
   'Your virtual assistant team starts with a real example from your day. We agree where the work happens, what a finished result looks like and how to flag decisions before taking on a regular workload.'
  ],
@@ -651,7 +672,7 @@ const trust = hero({title:'Trust and security',copy:'Use these questions to set 
  + editorialGuide(companyGuides.trust)
  + faq(pageQuestions.trust,'trust-faq');
 
-const contact = hero({title:'Describe the work you need help with',copy:'Use the examples below to plan your first handoff, then tell us what kind of work you need help with.',secondary:link('#contact-form',enquiryLabel),visual:photo('planning',{eager:true}),action:false})
+const contact = hero({title:'Describe the work you need help with',copy:'Tell us about the task, your current tools and the result you want. You can start with one recurring responsibility or ask about regular virtual assistant support.',details:contactLinks(),secondary:link('#contact-form',enquiryLabel),visual:photo('planning',{eager:true}),action:false})
  + section(`<div class="split contact-layout"><div>${intro('Bring one practical example.','Describe the work, the result you want and anything that needs approval. A short description is enough to start.')}${steps([['Workload','What comes up repeatedly, and how often?'],['Tools','Where do requests arrive and where is work recorded?'],['Coverage','Which time zone, days or handoffs matter?']])}</div>
  ${enquiryForm()}</div>`,'','contact-form')
  + section(photoIntro(intro('Pick one task you can review.')+cards([
@@ -686,11 +707,11 @@ const privacyPolicy = hero({
 }) + `<article class="wrap privacy-content">
  <section>
   <h2>Information you share</h2>
-  <p>The enquiry form asks for your name, company name, email address, phone number and a description of the support you need. Entries in the current form stay in your browser. When you contact us directly, we receive the information you share and any follow-up messages.</p>
+  <p>The enquiry form asks for your name, email, phone number, support needs and consent to be contacted. You may also share your company, preferred start date and time zone. We use Web3Forms to forward enquiries to our business support inbox. When you contact us directly, we receive the information and follow-up messages you share.</p>
  </section>
  <section>
   <h2>Website visits and cookies</h2>
-  <p>The hosting service may receive technical information such as your IP address, browser type and the pages you request. It may use those details to deliver the website, troubleshoot problems and protect the service. Globe Mitra does not currently add analytics or advertising cookies to this website.</p>
+  <p>The hosting service may receive technical information such as your IP address, browser type and the pages you request. It may use those details to deliver the website, troubleshoot problems and protect the service. ${siteName} does not currently add analytics or advertising cookies to this website.</p>
  </section>
  <section>
   <h2>How we use information</h2>
@@ -716,8 +737,8 @@ const privacyPolicy = hero({
  </section>
  <section id="privacy-contact">
   <h2>Privacy contact and updates</h2>
-  <p>If you’ve been in touch with us, send privacy questions or requests to your usual Globe Mitra contact. When emailing, use “Privacy request” as the subject and tell us what you’d like us to do. Include the email address you used for your enquiry if you have one.</p>
-  <p><strong>Privacy email</strong> [Email address to be added]</p>
+  <p>Send privacy questions or requests to ${siteName} using the email below. When emailing, use “Privacy request” as the subject and tell us what you’d like us to do. Include the email address you used for your enquiry if you have one.</p>
+  <p><strong>Privacy email</strong> <a href="mailto:${contactEmail}">${contactEmail}</a></p>
   <p>We post updates to this policy on this page.</p>
  </section>
 </article>`;
@@ -725,7 +746,7 @@ const privacyPolicy = hero({
 const recoveryPhotoSizes = '(max-width: 767px) 46vw, 23vw';
 const notFound=hero({title:'We couldn’t find that page.',copy:'The page may have moved. Choose a destination below to continue.',action:false,secondary:link('/index.html','Go to homepage','button primary'),visual:`<div class="recovery-photos">${photo('operations',{eager:true,sizes:recoveryPhotoSizes})}${photo('team',{sizes:recoveryPhotoSizes})}</div>`})
  + `<div class="wrap recovery-grid">${[
-   ['Home','Start with an overview of the work we help teams hand off. Browse service areas, open a sample output in the workflow lab, or find the industry directory.','index.html','web'],
+   ['Home','Start with an overview of the work we help teams hand off. Browse service areas, read the practical guidance, or find the industry directory.','index.html','web'],
    ['Services','Compare executive, customer, CRM, content and website support. Each playbook describes the work, gives a sample deliverable and explains which decisions stay with your team.','services.html','content'],
    ['Industries','Find examples for finance, real estate, e-commerce, marketing, technology and professional services. Each sector page shows a different queue, its tools and the person who can approve exceptions.','industries.html','pipeline'],
    [aboutLabel,'Read what the company does, meet founder Anuj Gupta and see the delivery roles that help carry work from request to review.','about.html','people'],
@@ -743,24 +764,37 @@ const pages=[
  ['about.html','About','Learn what the company does, meet founder Anuj Gupta and see how delivery roles fit together.',about],
  ['trust.html','Trust and Security','Plan account access, approvals, data handling and continuity.',trust],
  ['contact.html','Contact','Tell us about the work you need virtual assistant support with.',contact],
- [privacyPolicyUrl,'Privacy Policy','Learn how Globe Mitra handles information about website visits, enquiries and client work.',privacyPolicy],
+ [privacyPolicyUrl,'Privacy Policy',`Learn how ${siteName} handles information about website visits, enquiries and client work.`,privacyPolicy],
  ['404.html','Page Unavailable','This page could not be found.',notFound]
 ];
+const generatedPages = [];
 for(const [file,fallbackTitle,fallbackDescription,originalBody] of pages){
- const settings = pageSEO[file] || specialistPageSEO[file];
+ const baseSettings = pageSEO[file] || specialistPageSEO[file];
+ const settings = baseSettings ? {...baseSettings, ...seoOverrides[file]} : seoOverrides[file];
  const title = (settings?.title || fallbackTitle) + ' | ' + siteName;
  const desc = settings?.description || fallbackDescription;
- const body = settings ? applyPageSEO(originalBody, settings) : originalBody;
+ const body = prepareEditorialPage(originalBody,file);
  const page=`<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="${siteName}: ${desc}"><meta property="og:site_name" content="${siteName}"><meta property="og:title" content="${title}"><meta property="og:description" content="${siteName}: ${desc}"><meta property="og:type" content="website"><meta property="og:url" content="https://assistlaneglobal.com/${file === 'index.html' ? '' : file}"><meta name="twitter:card" content="summary"><meta name="robots" content="${file === '404.html' ? 'noindex, nofollow' : 'index, follow'}"><link rel="canonical" href="https://assistlaneglobal.com/${file === 'index.html' ? '' : file}"><meta name="theme-color" content="#08162f">
 <title>${title}</title>
-<link rel="icon" href="${mark}" type="image/svg+xml"><link rel="stylesheet" href="site.css?v=${styleVersion}"><script src="site.js?v=${scriptVersion}" defer></script></head>
-<body id="top">${header(file)}<main id="main" tabindex="-1">${body}${invitation(file)}</main>${footer(file)}</body></html>`;
- await writeFile(new URL(file,dir),file==='404.html'?page
-  .replace(/(href|src)="(?![#/])([^"]+)"/g,'$1="/$2"')
-  .replace(/srcset="([^"]+)"/g,(_, candidates)=>'srcset="'+candidates.split(', ').map(candidate=>'/'+candidate).join(', ')+'"'):page);
+<link rel="icon" href="${mark}" type="image/svg+xml"><link rel="stylesheet" href="site.css?v=${styleVersion}"><script type="module" src="site.js?v=${scriptVersion}"></script></head>
+<body id="top">${header(file)}<main id="main" class="${file==='index.html'?'home-page':'content-page'}" tabindex="-1">${body}${invitation(file)}</main>${footer(file)}</body></html>`;
+ const output = file==='404.html'?page
+  .replace(/(href|src)="(?![#/]|[a-z][a-z\d+.-]*:)([^"]+)"/gi,'$1="/$2"')
+  .replace(/srcset="([^"]+)"/g,(_, candidates)=>'srcset="'+candidates.split(', ').map(candidate=>'/'+candidate).join(', ')+'"'):page;
+ generatedPages.push({file,html:output,words:countPageWords(output),editorialWords:countEditorialWords(body),keyword:keywordMetrics(editorialWordTokens(body),file)});
 }
+const shortPages = generatedPages.filter(page=>page.editorialWords<1500);
+if (shortPages.length) throw new Error('Pages need at least 1,500 editorial words: '+shortPages.map(page=>`${page.file} (${page.editorialWords})`).join(', '));
+const oversizedPages = generatedPages.filter(page=>page.words>2000);
+if (oversizedPages.length) throw new Error('Pages exceed the 2,000-word limit: '+oversizedPages.map(page=>`${page.file} (${page.words})`).join(', '));
+const densityFailures=generatedPages.filter(page=>page.keyword.keyword && Math.abs(page.keyword.wordCoveragePercent-2)>0.000001);
+if(densityFailures.length) throw new Error('Primary keyword coverage must be 2%: '+densityFailures.map(page=>`${page.file} (${page.keyword.wordCoveragePercent.toFixed(4)}%)`).join(', '));
+for (const page of generatedPages) await writeFile(new URL(page.file,dir),page.html);
+await writeFile(new URL('word-counts.json',dir),JSON.stringify({minimumEditorialWords:1500,maximumTotalWords:2000,editorialScope:'Page content, including expandable examples and FAQ answers; excludes header, footer, shared footer CTA, form fields and page navigation.',pages:generatedPages.map(({file,words,editorialWords})=>({file,words,editorialWords}))},null,2)+'\n');
+await writeFile(new URL('keyword-density.json',dir),JSON.stringify({targetWordCoveragePercent:2,formula:'Exact primary-phrase mentions × phrase word count ÷ editorial word count × 100',scope:'Editorial page content, including expandable guidance. Excludes header, footer, shared footer CTA, forms and page navigation.',selection:'Existing first keyword in pageSEO or specialistPageSEO. Pages without a configured primary keyword are reported as not applicable.',pages:generatedPages.map(page=>page.keyword)},null,2)+'\n');
+console.log(`Built ${generatedPages.length} pages; editorial range ${Math.min(...generatedPages.map(page=>page.editorialWords))}–${Math.max(...generatedPages.map(page=>page.editorialWords))}; maximum ${Math.max(...generatedPages.map(page=>page.words))} total words per page.`);
 await writeFile(new URL('mark.svg',dir),`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 144"><title>${siteName}</title><image width="144" height="144" href="data:image/png;base64,${logo.toString('base64')}"/></svg>`);
 const publicPages = pages.filter(([file]) => file !== '404.html');
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
