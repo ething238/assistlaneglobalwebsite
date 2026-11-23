@@ -123,7 +123,6 @@ const faq=(items,id='')=>{
 const invitation=(page)=>{
  const url = companyHeroForms.has(page) ? enquiryAnchor : page==='contact.html' ? '#contact-form' : enquiryPageUrl;
  return `<section class="footer-cta" id="footer-cta" aria-labelledby="footer-cta-title">
- <img class="footer-cta-image" src="footer-workspace.webp" srcset="footer-workspace-800.webp 800w, footer-workspace.webp 1600w" sizes="100vw" width="1600" height="683" alt="" loading="lazy" decoding="async">
  <div class="wrap footer-cta-content">
   <h2 id="footer-cta-title">Let’s make your day easier.</h2>
   <p class="footer-cta-copy">Tell us what you need help with. We’ll discuss a simple starting point.</p>
@@ -134,49 +133,37 @@ const invitation=(page)=>{
 const list = (items, cls='')=>`<ul class="check-list ${cls}">${items.map(item=>`<li>${icon('check')}<span>${item}</span></li>`).join('')}</ul>`;
 const matrix = (columns,rows)=>`<table class="scope-table"><thead><tr>${columns.map(c=>`<th scope="col">${c}</th>`).join('')}</tr></thead><tbody>${rows.map(([title,...data])=>`<tr><th scope="row">${title}</th>${data.map((value,i)=>`<td><span class="cell-label" aria-hidden="true">${columns[i+1]}</span>${value}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
 const photoDescriptions = {
- operations: 'A person works at a laptop beside an open checklist.',
- team: 'Two colleagues review work together at a table.',
- planning: 'A person writes in an open notebook beside a laptop.',
- commerce: 'A fulfilment worker checks a parcel beside a tablet.',
- records: 'Hands sort documents beside a calculator and notebook.',
- systems: 'A blue module connects translucent blocks along circuit traces.',
- 'client-support': 'A customer support specialist wearing a headset works at a laptop.',
- 'editorial-review': 'An editorial coordinator compares printed designs with a laptop preview.',
- 'data-review': 'An analyst compares a printed table with records on a screen.',
- 'hiring-review': 'Two colleagues review folders and notes at a hiring meeting.',
- 'property-operations': 'A property coordinator reviews a floor plan beside a tablet and keys.',
- 'practice-intake': 'A receptionist works at a medical practice front desk.',
- 'field-operations': 'A construction coordinator checks a site plan beside a tablet and hard hat.',
- 'matter-review': 'A legal coordinator checks a laptop while sorting navy matter folders.',
- 'member-coordination': 'Two coordinators set up a volunteer sign-in table with lanyards and a laptop.',
- 'access-review': 'A person reviews a laptop beside a USB security key.'
+ commerce: 'An open parcel is checked beside a tablet and packing materials.',
+ records: 'Paper records are sorted into folders beside a calculator and notebook.',
+ 'client-support': 'A person wearing a headset handles a call at a laptop.',
+ 'editorial-review': 'Printed design drafts are compared with the layouts on a laptop screen.',
+ 'data-review': 'A printed data table is compared with charts on a laptop screen.',
+ 'hiring-review': 'Two people compare a document folder with notes during a review meeting.',
+ 'property-operations': 'A floor plan is reviewed beside a tablet and property keys.',
+ 'practice-intake': 'A person takes a phone call and records details at a medical reception desk.',
+ 'field-operations': 'A site plan is checked beside a tablet, hard hat and safety vest.',
+ 'matter-review': 'Document folders are sorted while their records are checked on a laptop.',
+ 'member-coordination': 'Two people prepare a registration table with lanyards, notes and a laptop.'
 };
+// Use a photo only where its visible subject explains the scope on that page.
+// The deliverable itself provides the visual in each sample section.
 const servicePhotos = {
- 'administrative-support': ['planning', 'operations'],
- 'customer-support': ['client-support', 'operations'],
- 'crm-lead-operations': ['data-review', 'client-support'],
- 'marketing-content': ['editorial-review', 'data-review'],
- 'seo-wordpress': ['editorial-review', 'systems'],
- 'accounting-bookkeeping': ['records', 'data-review'],
- 'research-data-support': ['data-review', 'planning'],
- 'recruiting-people-operations': ['hiring-review', 'operations'],
- 'workflow-automation': ['systems', 'access-review'],
- 'ecommerce-operations': ['commerce', 'client-support'],
- 'mobile-app-development': ['systems', 'team'],
- 'website-development': ['editorial-review', 'operations']
+ 'customer-support': 'client-support',
+ 'marketing-content': 'editorial-review',
+ 'accounting-bookkeeping': 'records',
+ 'research-data-support': 'data-review',
+ 'recruiting-people-operations': 'hiring-review',
+ 'ecommerce-operations': 'commerce'
 };
 const industryPhotos = {
- finance: ['records', 'planning'],
- 'real-estate': ['property-operations', 'operations'],
- ecommerce: ['commerce', 'data-review'],
- 'agencies-publications': ['editorial-review', 'planning'],
- 'ai-technology': ['systems', 'client-support'],
- 'professional-services': ['team', 'records'],
- healthcare: ['practice-intake', 'records'],
- legal: ['matter-review', 'access-review'],
- 'construction-field-services': ['field-operations', 'planning'],
- 'nonprofits-membership': ['member-coordination', 'team'],
- 'startups-small-business': ['operations', 'systems']
+ finance: 'records',
+ 'real-estate': 'property-operations',
+ ecommerce: 'commerce',
+ 'agencies-publications': 'editorial-review',
+ healthcare: 'practice-intake',
+ legal: 'matter-review',
+ 'construction-field-services': 'field-operations',
+ 'nonprofits-membership': 'member-coordination'
 };
 const photoSizes = '(max-width: 767px) calc(100vw - 32px), (max-width: 1424px) 48vw, 680px';
 const photo = (name, { eager = false, sizes = photoSizes } = {}) => {
@@ -186,7 +173,7 @@ const photo = (name, { eager = false, sizes = photoSizes } = {}) => {
   <img src="${name}.webp" alt="${alt}" srcset="${name}-720.webp 720w, ${name}.webp 1280w" sizes="${sizes}" width="1280" height="${name === 'systems' ? 720 : 853}" loading="${eager ? 'eager' : 'lazy'}" decoding="async"${eager ? ' fetchpriority="high"' : ''}>
  </figure>`;
 };
-const photoIntro = (content, name) => `<div class="split align-center photo-intro"><div>${content}</div>${photo(name)}</div>`;
+const photoIntro = (content, name) => name ? `<div class="split align-center photo-intro"><div>${content}</div>${photo(name)}</div>` : content;
 const founderProfile = `<figure class="founder-profile">
  <img src="anuj-gupta.webp" alt="Portrait of Anuj Gupta" width="280" height="350" loading="lazy" decoding="async">
  <figcaption><span class="founder-name">Anuj Gupta</span><span class="founder-role">Founder, ${siteName}</span></figcaption>
@@ -463,7 +450,7 @@ const homepage=hero({
    ['Agree the details','We confirm the scope, schedule, access and person who will review the work.'],
    ['Stay up to date','Receive the agreed updates, review results and adjust the workload as needed.']
  ])+link('how-it-works.html','How it works'),'','first-workflow')
- + section(`<div class="split align-center industry-overview"><div>${intro('Support for your industry','Explore virtual assistant support for finance, real estate, online stores, marketing teams, technology businesses and professional services. See how tasks, tools and responsibilities fit your working day.')}${link('industries.html','Explore all industries')}</div>${photo('operations')}</div>`,'','industry-overview')
+ + section(intro('Support for your industry','Explore virtual assistant support for finance, real estate, online stores, marketing teams, technology businesses and professional services. See how tasks, tools and responsibilities fit your working day.')+link('industries.html','Explore all industries'),'','industry-overview')
  + section(`<div class="founder-layout founder-preview"><div>${intro('Meet our founder','AssistLane Global supports founders and growing teams with clear responsibilities, agreed instructions and regular updates. Founder Anuj Gupta brings more than 25 years of experience building teams and products.')}<div class="section-links">${link('about.html','About AssistLane Global')}${link('trust.html','How we handle access')}</div></div>${founderProfile}</div>`,'','meet-the-founder')
  + faq([
    ['What can I delegate?','Start with admin, customer enquiries, CRM updates, research or content coordination. The Services page has the full range.'],
@@ -483,14 +470,14 @@ const servicesPage=hero({
  showEnquiryForm:true
 })
  + section(intro('Virtual assistant and specialist services')+serviceCards(),'','service-map')
- + section(photoIntro(intro('Start with your operating context.','See how the same service adapts to work such as property viewings, order exceptions, client approvals and product demos.')+link('industries.html','Browse industries'),'operations'),'warm')
+ + section(intro('Start with your operating context.','See how the same service adapts to work such as property viewings, order exceptions, client approvals and product demos.')+link('industries.html','Browse industries'),'warm')
  + section(intro('What to hand off when you hire a virtual assistant')+`<div class="card-grid two">${[['Organise my day','administrative-support'],['Respond to customers','customer-support'],['Manage leads and follow-ups','crm-lead-operations'],['Publish on LinkedIn and social media','marketing-content'],['Keep the books current','accounting-bookkeeping'],['Run the store queue','ecommerce-operations']].map(([title,id])=>{const service=services.find(s=>s.id===id);return `<div class="simple-card">${cardHeading(title,service.icon)}${link(serviceURL(service),service.title)}</div>`;}).join('')}</div>`,'mint')
  + section(intro('Combine virtual assistant services around one result','When a task moves between tools or teams, define where each handoff happens and who owns the final output.')+cards([
    ['From enquiry to follow-up','Customer support records the enquiry, then CRM support checks the contact and assigns the next action.'],
    ['From brief to live page','Content support collects assets and approval, then WordPress support checks the preview and records the live URL.'],
    ['From meeting to action list','Executive support prepares the agenda and records decisions. The delivery owner tracks outstanding actions in the agreed workspace.']
  ]),'sky','combined-services','planning')
- + section(`<div class="split align-center"><div>${intro('The task and the working arrangement','Write down what needs doing, what a finished result looks like and who should review it. Then decide what can be handled independently.')}${link('how-it-works.html','See the delivery process')}</div>${photo('team')}</div>`)
+ + section(intro('The task and the working arrangement','Write down what needs doing, what a finished result looks like and who should review it. Then decide what can be handled independently.')+link('how-it-works.html','See the delivery process'))
  + editorialGuide(siteGuides.services)
  + faq(pageQuestions.services,'service-faq');
 
@@ -518,8 +505,7 @@ function servicePage(s){
   intro:'Use this scope to decide what goes into the queue, what a finished task looks like and which decisions your team keeps.',
   workColumn:'What the assistant does'
  };
- const [scopePhoto, samplePhoto] = servicePhotos[s.id];
- const backdrop = [scopePhoto, samplePhoto].includes('operations') ? 'team' : 'operations';
+ const scopePhoto = servicePhotos[s.id];
  return hero({
   title:p.title || s.title,copy:s.id==='accounting-bookkeeping' ? ['Keep invoices, expenses, bank reconciliations and month-end records ready for your finance reviewer.', ...p.copy.slice(1)] : p.copy,tone:'service-hero',
   secondary:link('#scope','Explore the scope','button primary'),
@@ -528,8 +514,8 @@ function servicePage(s){
  + section(photoIntro(intro(scope.title,scope.intro),scopePhoto)+matrix(['Workstream',scope.workColumn,'What you get','Your approval'],p.matrix),'','scope')
  + catalogueSections(s.details || serviceDetails[s.id])
  + section(intro('Where this helps day to day.')+cards(p.scenarios),'warm','scenarios')
- + section(intro('What the finished handoff looks like.','This example uses fictional records.')+`<div class="split lab-layout with-photo">${photo(samplePhoto)}${sample(s.sample)}</div>`,'dark-section','sample')
- + section(intro('From request to review.')+`<div class="split workflow-layout">${steps(s.steps)}${workflowIllustration(s.steps.map(([title])=>title),icons)}</div>`,'','handoff',backdrop)
+ + section(intro('What the finished handoff looks like.','This example uses fictional records.')+`<div class="deliverable-example">${sample(s.sample)}</div>`,'dark-section','sample')
+ + section(intro('From request to review.')+`<div class="split workflow-layout">${steps(s.steps)}${workflowIllustration(s.steps.map(([title])=>title),icons)}</div>`,'','handoff')
  + section(intro(p.checksTitle || 'What to verify before closing a task.')+`<div class="split">${list(p.checks)}<div class="scope-panel">${cardHeading(p.toolsTitle || 'Work in the tools you already use.','web')}<div class="system-tags">${p.systems.map(tool=>`<span>${tool}</span>`).join('')}</div><p>${s.tools}</p><p><strong>Approval boundary.</strong> ${s.boundary}</p>${link('trust.html','Read about trust and access')}</div></div>`,'mint','quality')
  + (guide ? detailedWorkflow(guide,icons,s.playbook ? catalogueIntro : intro) : '')
  + faq(p.extraFAQ ? [...s.faq,p.extraFAQ] : s.faq,'service-faq')
@@ -561,12 +547,12 @@ const industryDirectory = hero({
     ['Research and data','A startup needs a sourced competitor comparison.','A publication needs facts and original sources checked before review.']
   ]
  ),'','shared-workflows','planning')
- + section(photoIntro(intro('Approval boundaries for specialized virtual assistant services')+cards([
+ + section(intro('Approval boundaries for specialized virtual assistant services')+cards([
    ['Finance','The assistant prepares an exception record. An authorised finance reviewer decides what gets approved or paid.'],
    ['E-commerce','Routine order updates follow an approved policy. Refunds and replacements outside that policy go to the store owner.'],
    ['Marketing','The assistant prepares assets and previews. The brand or editorial owner signs off on the final version.']
- ],'stacked')+link('trust.html','Read about access and approvals'),'commerce'),'sky','industry-approvals')
- + section(`<div class="split align-center">${intro('Plan coverage for industry specific virtual assistants','Start with a real example and name the tools, the decision owner and how often the work comes in. Use the service playbooks to combine functions when one workflow spans several teams.')}${photo('data-review')}</div>`+
+ ])+link('trust.html','Read about access and approvals'),'sky','industry-approvals')
+ + section(intro('Plan coverage for industry specific virtual assistants','Start with a real example and name the tools, the decision owner and how often the work comes in. Use the service playbooks to combine functions when one workflow spans several teams.')+
   cards([
     ['Select the work','Pick a recurring queue, a regular deadline or a handoff that keeps falling between teams.'],
     ['Set the guardrails','Agree account access, approvals and the decisions that require specialist expertise.'],
@@ -579,8 +565,7 @@ function industryPage(industry) {
  const industryServices = ['finance','ecommerce','professional-services','startups-small-business'].includes(industry.id) ? ['accounting-bookkeeping', ...industry.services.filter(id=>id!=='accounting-bookkeeping')] : industry.services;
  const related = industryServices.map(id=>services.find(service=>service.id===id));
  const guide = industryGuides[industry.id] || specialistGuides[industry.id];
- const [scopePhoto, samplePhoto] = industryPhotos[industry.id];
- const backdrop = [scopePhoto, samplePhoto].includes('operations') ? 'team' : 'operations';
+ const scopePhoto = industryPhotos[industry.id];
  return hero({
   title:industry.headline,
   copy:[industry.summary, ...industry.coverDetails],
@@ -591,8 +576,8 @@ function industryPage(industry) {
  + section(photoIntro(intro('What your team can hand off.','Use this example scope to agree the work, the deliverable and who makes the final decision.'),scopePhoto)+
   matrix(['Workstream','What the assistant does','What you get','Your approval'],industry.scope),'','sector-scope')
  + catalogueSections(industryDetails[industry.id])
- + section(intro('How the handoff works.')+`<div class="split workflow-layout">${steps(industry.flow)}${workflowIllustration(industry.flow.map(([title])=>title),[industry.icon,'content','check'])}</div>`,'warm','sector-flow',backdrop)
- + section(intro('What the finished handoff looks like.','This example uses fictional records.')+`<div class="split lab-layout with-photo">${photo(samplePhoto)}${sample(industry.sample)}</div>`,'dark-section','sector-sample')
+ + section(intro('How the handoff works.')+`<div class="split workflow-layout">${steps(industry.flow)}${workflowIllustration(industry.flow.map(([title])=>title),[industry.icon,'content','check'])}</div>`,'warm','sector-flow')
+ + section(intro('What the finished handoff looks like.','This example uses fictional records.')+`<div class="deliverable-example">${sample(industry.sample)}</div>`,'dark-section','sector-sample')
  + section(intro('What to bring to setup.')+`<div class="split">${list(industry.inputs)}
    <div class="scope-panel">${cardHeading('Set access around the work.','people')}
     <div class="system-tags">${industry.tools.map(tool=>`<span>${tool}</span>`).join('')}</div>
@@ -606,17 +591,17 @@ function industryPage(industry) {
 
 const how = hero({title:'How it works',copy:'Start with a clear scope, test a small handoff and decide how everyday work gets assigned, reviewed and improved.',visual:`<div class="hero-panel mint">${steps([['Discover','Choose the first workflow.'],['Onboard','Agree instructions and access.'],['Review','Check the result together.']],'strong')}</div>`})
  + section(intro('What happens at each stage')+`<ol class="timeline">${process.map(([h,p],i)=>`<li><span class="step-number">0${i+1}</span><div>${cardHeading(h)}<p>${p}</p></div></li>`).join('')}</ol>`)
- + section(intro('Start with a daily brief.','Share a few examples and review a draft before approving replies or calendar changes.')+`<div class="split lab-layout with-photo">${photo('operations')}${sample(services.find(service=>service.id==='administrative-support').sample)}</div>`,'dark-section')
+ + section(intro('Start with a daily brief.','Share a few examples and review a draft before approving replies or calendar changes.')+`<div class="deliverable-example">${sample(services.find(service=>service.id==='administrative-support').sample)}</div>`,'dark-section')
  + section(intro('Make each decision easy to route.')+cards([['You provide','Priorities, authorised access, source information and a named person for approvals.'],['Delivery owner','Written task instructions, an agreed work log, questions and exceptions that need a decision.'],['Review together','Check completed work, update the instructions and decide how to handle changes or absences.']])+link('trust.html#access','Plan access and approvals'),'','decision-owners','planning')
  + section(intro('Know what to review and when.')+matrix(['Cadence','Work in scope','What you review'],sampleSchedules),'warm')
- + section(`<div class="split align-center"><div>${intro('Decide whether to expand the scope.')}${list(['Compare the result with the example you provided. Note any changes needed to tone, format or accuracy.','Check whether routine work could proceed and whether exceptions reached the right person.','Update the instructions, coverage and permissions before adding another queue or system.'])}</div>${photo('team')}</div>`)
+ + section(intro('Decide whether to expand the scope.')+list(['Compare the result with the example you provided. Note any changes needed to tone, format or accuracy.','Check whether routine work could proceed and whether exceptions reached the right person.','Update the instructions, coverage and permissions before adding another queue or system.']))
  + editorialGuide(companyGuides.how)
  + faq(pageQuestions.how,'how-faq');
 
 const pricing = hero({title:'Pricing for the work you need',copy:'Use discovery to define a scope you can compare: the tasks, capacity, coverage, specialist skills and review responsibilities.',tone:'sky',secondary:link('#quote','See what shapes a quote'),visual:workflowIllustration(['List the tasks','Estimate capacity','Review the scope'],['content','calendar','ledger'])})
- + section(photoIntro(intro('What affects the cost')+cards([['Time and coverage','Expected volume, regular hours, time zone overlap and how quickly a task needs attention.'],['Skills and complexity','The systems involved, the level of specialist input and whether work spans several functions.'],['Setup and oversight','Documentation, onboarding, quality review, reporting and access setup. See <a href="how-it-works.html#delivery-example">what the first handoff involves</a>.']],'stacked'),'records'),'','quote')
+ + section(intro('What affects the cost')+cards([['Time and coverage','Expected volume, regular hours, time zone overlap and how quickly a task needs attention.'],['Skills and complexity','The systems involved, the level of specialist input and whether work spans several functions.'],['Setup and oversight','Documentation, onboarding, quality review, reporting and access setup. See <a href="how-it-works.html#delivery-example">what the first handoff involves</a>.']]),'','quote')
  + section(intro('Compare scope and terms together.')+`<div class="comparison">${[['Capacity','Hours or expected volume; overage rules; time zone and coverage.'],['Included work','Tasks, deliverables, tools, reviews and approval limits.'],['Fees and billing','Currency, billing period, setup fees and any specialist or tool charges.'],['Changes and continuity','How scope changes, handovers, unused capacity and gaps in coverage are handled.'],['Commitment','Start date, renewal, notice and cancellation terms.']].map(([h,p])=>`<div>${cardHeading(h)}<p>${p}</p></div>`).join('')}</div>`,'warm')
- + section(photoIntro(intro('Two ways to define the work')+cards([['Recurring admin','A daily inbox review and a weekly calendar check. Estimate typical volume, time zone overlap and how often an approval is needed.'],['Content publication','An approved article queue. Define expected volume, formatting and on-page checks, and which changes need specialist review.']],'stacked'),'planning'),'sky')
+ + section(intro('Two ways to define the work')+cards([['Recurring admin','A daily inbox review and a weekly calendar check. Estimate typical volume, time zone overlap and how often an approval is needed.'],['Content publication','An approved article queue. Define expected volume, formatting and on-page checks, and which changes need specialist review.']],'two'),'sky')
  + section(intro('Bring enough detail for a useful quote.','A small sample of real work makes it easier to separate execution time, review time and special cases.')+matrix(['Input','What to bring','Why it changes the scope'],[
    ['Volume','Typical and peak weekly item counts.','Surges may require extra coverage or different turnaround targets.'],
    ['Complexity','A routine example and an exception.','They show the difference between checklist work and work that needs judgment.'],
@@ -642,7 +627,7 @@ const about = hero({
  backdrop:'data-review',
  showEnquiryForm:true
 })
- + section(`<div class="split align-center"><div>${intro('We help teams hand off recurring work.','An overflowing inbox, a growing queue or a publication backlog can pull people away from work that needs their judgment. We help define a handoff with a clear owner, a useful output and an agreed review step.')}${link('services.html','Explore our services')}</div>${photo('team')}</div>`,'','what-we-do')
+ + section(intro('We help teams hand off recurring work.','An overflowing inbox, a growing queue or a publication backlog can pull people away from work that needs their judgment. We help define a handoff with a clear owner, a useful output and an agreed review step.')+link('services.html','Explore our services'),'','what-we-do')
  + section(intro('Meet our founder')+`<div class="founder-layout">
    ${founderProfile}
    <div class="founder-bio">
@@ -669,7 +654,7 @@ const about = hero({
  + faq(pageQuestions.about,'about-faq');
 
 const trust = hero({title:'Trust and security',copy:'Use these questions to set permissions, review points and handover responsibilities before sharing accounts or records.',tone:'white',visual:workflowIllustration(['Request access','Approve the role','Review permissions'],['content','people','check'])})
- + section(photoIntro(intro('The access model'),'access-review')+steps([['Request','List the system, data, role and reason for access.'],['Authorise','Have the account owner approve the minimum permissions the task needs.'],['Review and remove','Recheck access when the scope changes and confirm removal at handover.']]),'mint','access')
+ + section(intro('The access model')+steps([['Request','List the system, data, role and reason for access.'],['Authorise','Have the account owner approve the minimum permissions the task needs.'],['Review and remove','Recheck access when the scope changes and confirm removal at handover.']]),'mint','access')
  + section(intro('Decisions to document')+cards([['Collection and storage','Confirm the files and fields the work requires, where records are kept and which systems are approved.'],['Sharing and retention','Set who can view or export records, how long working copies are needed and how they are returned or removed.'],['Quality and escalation','Agree how sensitive work is reviewed and who to contact if data is mishandled or a task needs a decision.']]),'','access-decisions','team')
  + section(intro('Match permissions to the actual task.')+matrix(['Workflow','Starting permission','Separate approval'],[
    ['Executive inbox','Read and draft in the agreed mailbox.','Sending as the executive or changing mailbox rules.'],
@@ -678,18 +663,18 @@ const trust = hero({title:'Trust and security',copy:'Use these questions to set 
    ['WordPress update','Create and preview drafts with an editor role.','Publishing, changing redirects or installing plugins.']
  ]),'warm')
  + section(intro('Approve tools before sharing information.','Confirm which external tools are permitted, what information can be entered and how outputs will be checked. Discuss AI tools separately where relevant.'),'sky')
- + section(photoIntro(intro('Keep the next owner visible.')+cards([['Continuity','Write down where open work, instructions and approvals live so a replacement can pick them up. See <a href="how-it-works.html#coverage-changes">how a change in coverage is handled</a>.'],['Raising a concern','Agree an escalation contact and what to include: the system involved, what happened and when it was first noticed.']],'stacked'),'records'))
+ + section(intro('Keep the next owner visible.')+cards([['Continuity','Write down where open work, instructions and approvals live so a replacement can pick them up. See <a href="how-it-works.html#coverage-changes">how a change in coverage is handled</a>.'],['Raising a concern','Agree an escalation contact and what to include: the system involved, what happened and when it was first noticed.']],'two'))
  + editorialGuide(companyGuides.trust)
  + faq(pageQuestions.trust,'trust-faq');
 
-const contact = hero({title:'Describe the work you need help with',copy:'Tell us about the task, your current tools and the result you want. You can start with one recurring responsibility or ask about regular virtual assistant support.',details:contactLinks(),secondary:link('#contact-form',enquiryLabel),visual:photo('planning',{eager:true}),action:false})
+const contact = hero({title:'Describe the work you need help with',copy:'Tell us about the task, your current tools and the result you want. You can start with one recurring responsibility or ask about regular virtual assistant support.',details:contactLinks(),secondary:link('#contact-form',enquiryLabel),action:false})
  + section(`<div class="split contact-layout"><div>${intro('Bring one practical example.','Describe the work, the result you want and anything that needs approval. A short description is enough to start.')}${steps([['Workload','What comes up repeatedly, and how often?'],['Tools','Where do requests arrive and where is work recorded?'],['Coverage','Which time zone, days or handoffs matter?']])}</div>
  ${enquiryForm()}</div>`,'','contact-form')
- + section(photoIntro(intro('Pick one task you can review.')+cards([
+ + section(intro('Pick one task you can review.')+cards([
    ['Start with a repeatable request','A daily inbox check, weekly CRM cleanup or regular page update gives you a concrete place to begin.'],
    ['Describe the finished result','Use a familiar format such as a daily digest, an updated record or a checklist with blocked items.'],
    ['Note the exception','Include a case that needs a different decision, such as a refund outside policy or a change that requires publishing approval.']
- ],'stacked')+link('services.html','Browse service examples'),'operations'),'mint','choose-a-task')
+ ])+link('services.html','Browse service examples'),'mint','choose-a-task')
  + section(`<div class="split align-center"><div>${intro('See what to include in your description.','A short brief is enough if it says what to do, what to return, when the work happens and who handles exceptions.')}</div>
   ${sample({title:'Daily inbox triage',type:'SAMPLE HANDOFF BRIEF',rows:[
     ['TASK','Review the shared mailbox and draft routine replies.','Each weekday'],
@@ -753,8 +738,7 @@ const privacyPolicy = hero({
  </section>
 </article>`;
 
-const recoveryPhotoSizes = '(max-width: 767px) 46vw, 23vw';
-const notFound=hero({title:'We couldn’t find that page.',copy:'The page may have moved. Choose a destination below to continue.',action:false,secondary:link('/index.html','Go to homepage','button primary'),visual:`<div class="recovery-photos">${photo('operations',{eager:true,sizes:recoveryPhotoSizes})}${photo('team',{sizes:recoveryPhotoSizes})}</div>`})
+const notFound=hero({title:'We couldn’t find that page.',copy:'The page may have moved. Choose a destination below to continue.',action:false,secondary:link('/index.html','Go to homepage','button primary')})
  + `<div class="wrap recovery-grid">${[
    ['Home','Start with an overview of the work we help teams hand off. Browse service areas, read the practical guidance, or find the industry directory.','index.html','web'],
    ['Services','Compare executive, customer, CRM, content and website support. Each playbook describes the work, gives a sample deliverable and explains which decisions stay with your team.','services.html','content'],
