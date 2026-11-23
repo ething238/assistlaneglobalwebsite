@@ -279,7 +279,7 @@ function header(page){
   <a class="brand" href="index.html" aria-label="${siteName} home">${brand}</a>
   <button class="mobile-menu" type="button" aria-expanded="false" aria-controls="navigation">Menu <span aria-hidden="true">☰</span></button>
   <nav id="navigation" class="navigation" aria-label="Main navigation">
-   ${nav('index.html','Home',page)}
+   ${nav('index.html','Home',page)}${nav('about.html','About Us',page)}
    <details class="nav-dropdown services-menu" name="primary-navigation">
     <summary aria-controls="services-dropdown">Services ${chevron}</summary>
     <div class="menu-panel" id="services-dropdown">
@@ -292,7 +292,7 @@ function header(page){
      <div class="menu-grid">${industries.map(industry=>`<a href="${industryURL(industry)}"${page===industryURL(industry)?' aria-current="page"':''}>${icon(industry.icon)}<span>${menuLabel(industry.name)}</span></a>`).join('')}</div>
     </div>
    </details>
-   ${nav('how-it-works.html','How it works',page)}${nav('about.html','About Us',page)}${nav('pricing.html','Pricing',page)}
+   ${nav('how-it-works.html','Our Process',page)}${nav('pricing.html','Pricing',page)}
    <a class="mobile-contact" href="${enquiryUrl}">${enquiryLabel}</a>
   </nav><div class="header-cta">${call(enquiryUrl)}</div></div></header>`;
 }
@@ -312,7 +312,7 @@ const footer=(page)=>`<footer class="site-footer" id="site-footer"><div class="w
  </nav>
  <nav class="footer-column footer-company" aria-label="Company">
   <p class="footer-title">Company</p>
-  <div class="footer-links">${nav('about.html','About us',page)}${nav('how-it-works.html','How it works',page)}${nav('pricing.html','Pricing',page)}${nav('industries.html','Industries',page)}${nav('trust.html','Trust and security',page)}${nav(privacyPolicyUrl,'Privacy Policy',page)}</div>
+  <div class="footer-links">${nav('about.html','About us',page)}${nav('how-it-works.html','Our Process',page)}${nav('pricing.html','Pricing',page)}${nav('industries.html','Industries',page)}${nav('trust.html','Trust and security',page)}${nav(privacyPolicyUrl,'Privacy Policy',page)}</div>
  </nav>
  </div><div class="footer-utility">
   ${link(enquiryPageUrl,enquiryLabel,'footer-action')}
