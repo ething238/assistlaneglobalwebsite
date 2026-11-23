@@ -240,15 +240,6 @@
       "phraseFrequencyPercent": 0.5
     },
     {
-      "file": "pricing.html",
-      "keyword": "virtual assistant pricing",
-      "mentions": 11,
-      "keywordWords": 3,
-      "editorialWords": 1650,
-      "wordCoveragePercent": 2,
-      "phraseFrequencyPercent": 0.6666666666666666
-    },
-    {
       "file": "about.html",
       "keyword": "virtual assistant company",
       "mentions": 11,

@@ -73,9 +73,9 @@ def main():
     key = re.search(r"web3formsAccessKey\s*=\s*'([^']+)'", (ROOT / 'form-config.mjs').read_text(encoding='utf-8'))[1]
     docs = {file.name: Document(file.read_text(encoding='utf-8')) for file in sorted(DIST.glob('*.html'))}
     assert set(docs) == set(legacy) == set(counts) == set(density), 'Page paths changed'
-    assert len(docs) == 33
+    assert len(docs) == 32
     industry_pages = {file for file in docs if file.startswith('industry-')}
-    company_pages = {'index.html', 'how-it-works.html', 'pricing.html', 'about.html', 'trust.html', 'contact.html', 'privacy-policy.html', '404.html'}
+    company_pages = {'index.html', 'how-it-works.html', 'about.html', 'trust.html', 'contact.html', 'privacy-policy.html', '404.html'}
     service_pages = set(docs) - industry_pages - company_pages - {'industries.html', 'services.html'}
     assert len(industry_pages) == 11 and len(service_pages) == 12
     form_count = link_count = target_count = 0
@@ -153,7 +153,7 @@ def main():
             status = next(n for n in form.nodes() if 'enquiry-status' in n.attrs.get('class', '').split())
             assert not status.text().strip(), file
         assert not re.search(r'ea5e080d', (DIST / file).read_text(encoding='utf-8')), file
-    assert form_count == 28 and target_count == 29, (form_count, target_count)
+    assert form_count == 28 and target_count == 28, (form_count, target_count)
     privacy = docs['privacy-policy.html']
     assert 'globmitra' not in privacy.root.text().lower()
     assert all('globmitra' not in n.attrs.get('content', '').lower() for n in privacy.root.nodes() if n.tag == 'meta')

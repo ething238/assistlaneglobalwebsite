@@ -61,7 +61,6 @@ The main headings on 23 of 29 content pages use a phrase found in the supplied e
 | industry-ai-technology.html | Virtual assistant for tech startups | virtual assistant for tech startups | Unavailable |
 | industry-professional-services.html | Virtual assistant for consulting firms | virtual assistant for consulting firms | Unavailable |
 | how-it-works.html | How to work with a virtual assistant | how to work with a virtual assistant | 40 |
-| pricing.html | Cost of hiring a virtual assistant | cost of hiring a virtual assistant | 10 |
 | trust.html | Virtual assistant access management and data security | virtual assistant access management | Unavailable |
 | contact.html | Virtual assistant task planner | virtual assistant task planner | Unavailable |
 | accounting-bookkeeping.html | Bookkeeping virtual assistant for invoices and reconciliation | bookkeeping virtual assistant | 720 |
@@ -291,21 +290,6 @@ Editorial words 1,745. Combined mentions 35. Combined density 2.006%.
 Title — Virtual Assistant Onboarding Process | How It Works
 
 Measured title width 468.0px. Meta description width 822.0px in Arial at 14px.
-
-### Pricing and Plans
-
-Page — pricing.html
-
-1. **virtual assistant pricing** — Primary. Average monthly searches 390. Page mentions 11. [Source export](<C:/Users/1234j/Downloads/Keyword Stats 2026-11-05 at 14_09_10.csv>)
-2. **virtual assistant rates** — Supporting. Average monthly searches 390. Page mentions 8. [Source export](<C:/Users/1234j/Downloads/Keyword Stats 2026-11-05 at 14_09_10.csv>)
-3. **virtual assistant hourly rates** — Supporting. Average monthly searches 260. Page mentions 8. [Source export](<C:/Users/1234j/Downloads/Keyword Stats 2026-11-05 at 14_09_10.csv>)
-4. **cost of hiring a virtual assistant** — Supporting. Average monthly searches 10. Page mentions 8. [Source export](<C:/Users/1234j/Downloads/Keyword Stats 2026-11-05 at 14_09_10.csv>)
-
-Editorial words 1,723. Combined mentions 35. Combined density 2.031%.
-
-Title — Virtual Assistant Pricing | Rates and Scope
-
-Measured title width 379.0px. Meta description width 804.0px in Arial at 14px.
 
 ### About Us
 

@@ -713,26 +713,6 @@ export const legacyAnchorIds = {
     "footer-cta-title",
     "site-footer"
   ],
-  "pricing.html": [
-    "top",
-    "navigation",
-    "services-dropdown",
-    "industries-dropdown",
-    "main",
-    "quote",
-    "scope-changes",
-    "capacity-example",
-    "choose-capacity",
-    "quote-review",
-    "cost-questions",
-    "pricing-scenarios",
-    "pricing-change-questions",
-    "pricing-review",
-    "pricing-faq",
-    "footer-cta",
-    "footer-cta-title",
-    "site-footer"
-  ],
   "privacy-policy.html": [
     "top",
     "navigation",

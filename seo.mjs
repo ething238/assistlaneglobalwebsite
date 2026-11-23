@@ -810,62 +810,6 @@ export const pageSEO = {
       ]
     ]
   },
-  "pricing.html": {
-    "page": "Pricing and Plans",
-    "title": "Virtual Assistant Pricing | Rates and Scope",
-    "description": "Understand virtual assistant pricing by comparing workload, coverage and skills. Define the scope and review what affects cost.",
-    "h1": "Cost of hiring a virtual assistant",
-    "keywords": [
-      "virtual assistant pricing",
-      "virtual assistant rates",
-      "virtual assistant hourly rates",
-      "cost of hiring a virtual assistant"
-    ],
-    "reference": null,
-    "headings": [
-      [
-        0,
-        "What affects virtual assistant pricing"
-      ],
-      [
-        5,
-        "Estimate the cost of hiring a virtual assistant"
-      ],
-      [
-        6,
-        "Compare virtual assistant hourly rates and coverage"
-      ]
-    ],
-    "sectionCopy": [
-      "Virtual assistant pricing depends on hours and scope. Compare virtual assistant rates against the same workload.",
-      "Ask what virtual assistant rates include before comparing quotes. The cost of hiring a virtual assistant also depends on setup, review and changes in the work.",
-      "Compare virtual assistant hourly rates for the same tasks. Virtual assistant pricing varies with review needs.",
-      "Estimate the cost of hiring a virtual assistant using normal and busy periods. Virtual assistant pricing should account for the questions that take extra review time.",
-      "Review virtual assistant rates when the workload or coverage changes. Virtual assistant hourly rates alone do not describe what happens when a queue exceeds its scope.",
-      "Virtual assistant pricing becomes easier to estimate with a small sample. Compare the cost of hiring a virtual assistant against the execution and review time that sample requires.",
-      "Compare virtual assistant hourly rates alongside availability and the work included. The cost of hiring a virtual assistant should also reflect any specialist input.",
-      "Check virtual assistant pricing against the tasks your team actually needs. Virtual assistant rates should be accompanied by a clear scope and approval for changes.",
-      "Provide the same details when requesting virtual assistant rates. Virtual assistant pricing is easier to compare when the volumes, tools and deadlines match.",
-      "Compare the cost of hiring a virtual assistant under different coverage windows. Virtual assistant hourly rates need to be read alongside the time reserved for the queue.",
-      "Ask how virtual assistant pricing handles predictable peaks. Virtual assistant rates for additional work should have a clear approval route before the busy period.",
-      "Review virtual assistant rates after the first complete work cycle. Use the actual volume and review time to see whether the original quote still fits.",
-      "Ask what changes virtual assistant pricing before requesting a quote. Virtual assistant hourly rates should be considered with the review process and expected coverage."
-    ],
-    "textEdits": [
-      [
-        "<h3>Count by request type</h3>",
-        "<h3>Estimate workload by request type</h3>"
-      ],
-      [
-        "<h3>Include setup and review</h3>",
-        "<h3>Compare virtual assistant rates with setup included</h3>"
-      ],
-      [
-        "<h3>Separate coverage from volume</h3>",
-        "<h3>Review virtual assistant hourly rates and coverage</h3>"
-      ]
-    ]
-  },
   "about.html": {
     "page": "About GlobMitra",
     "title": "About Our Virtual Assistant Company | Anuj Gupta",

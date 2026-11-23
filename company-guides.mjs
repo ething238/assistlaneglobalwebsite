@@ -90,7 +90,7 @@ export const companyGuides = {
       items: [
         ['When volume changes', 'Review what arrived, which deadlines are affected and whether a temporary queue makes sense. Get approval before extending a commitment beyond the coverage already agreed.'],
         ['When the owner changes', 'Provide the new owner with the working instructions, the latest output and a list of decisions still open. Confirm their access to the records before the previous owner steps away.'],
-        ['When the scope changes', 'Describe the new task separately from the existing work. Agree the tools, permissions, coverage and first example to review. If the change needs more capacity, see <a href="pricing.html#scope-changes">when to revisit the quote</a>.']
+        ['When the scope changes', 'Describe the new task separately from the existing work. Agree the tools, permissions, coverage and first example to review. For new account permissions, see <a href="trust.html#access">how to review and approve access changes</a>.']
       ]
     },
     {
@@ -128,72 +128,6 @@ export const companyGuides = {
         ["Compare the starting rules", "Look at how requests enter the new queue, what a finished result looks like and who owns exceptions. Reuse instructions only when the same people and approval boundaries apply."],
         ["Test a small batch", "Pick an ordinary case and an exception. Have the new reviewer compare the outputs with the agreed examples and confirm where questions should go before the assistant handles a larger volume."],
         ["Agree what to check next", "Track whether the original queue still gets attention when the new one is busy. Review the two queues separately so the team can tell whether a delay came from added volume, an unclear rule or unavailable reviewers."]
-      ]
-    }
-  ],
-  pricing: [
-    {
-      id: 'capacity-example', title: 'Turn a workload into an estimate.',
-      intro: 'A useful estimate is based on how work actually arrives. Separate routine items, exceptions and review time. A sample quote for an inbox queue could use a typical week and a busier week to explain what coverage needs to handle.',
-      items: [
-        ['Count by request type', 'Use examples of the work rather than one total for the whole queue. A template reply, a scheduling conflict and a request that needs approval can take different amounts of time and involve different owners.'],
-        ['Include setup and review', 'Account for the first batch, walkthroughs and changes to instructions. Ask which setup work is included and how ongoing reviews are scheduled once the workflow is stable.'],
-        ['Separate coverage from volume', 'A smaller queue may still need a regular response window. Show whether a deadline applies to every item or only urgent requests, and note the time zone and days that matter.']
-      ], visual: [['Measure volume','Check complexity','Set coverage'],['pipeline','ledger','calendar']]
-    },
-    {
-      id: 'choose-capacity', title: 'Decide which kind of coverage fits.',
-      intro: 'Different scope shapes can cover similar tasks. Compare the expected output, the working hours, the approval route and how changes are handled. The right fit depends on the work the team needs to keep moving.',
-      items: [
-        ['A regular brief', 'Useful when the inputs are predictable and one person reviews the output. Agree the schedule and what should happen if a request is too urgent for the next brief.'],
-        ['A shared queue', 'Useful when work arrives throughout an agreed coverage window. Define which categories are in scope, how items are prioritised and how unresolved work is handed to the next owner.'],
-        ['A connected set of tasks', 'Useful when more than one team contributes to a finished result. Ask whether handoffs, review, documentation and changes are included in the proposed capacity.']
-      ]
-    },
-    {
-      id: 'quote-review', title: 'Check the proposal against the actual workflow.',
-      intro: 'Read the proposal with a concrete example open. Check that each step belongs to someone and that the estimate includes the work required to complete and review it.',
-      items: [
-        ['Check the starting conditions', 'Ask what needs to be in place on day one, such as access to a queue, approved templates or an available reviewer. Identify which delay would change the timing of the first output.'],
-        ['Check the change route', 'Look for a clear way to add work, reduce volume or change coverage. Agree who can request the change and when a revised scope takes effect.'],
-        ['Check the handover', 'Confirm what happens to instructions, open items and access if the scope ends or moves to another person. Identify the record that will show the final status.']
-      ], visual: [['Compare the scope','Confirm the terms','Agree the handover'],['content','check','people']]
-    },
-    {
-      id: 'cost-questions', title: 'Share the details that affect the estimate.',
-      intro: 'A short description of the workflow can save a second round of questions. Include one ordinary request, one exception and a sample of the output you want back. State the working hours and the tools involved.',
-      items: [
-        ['Explain the busy periods', 'Show what changes during events, launches or reporting deadlines. Indicate whether extra demand is temporary or part of the normal workload.'],
-        ['Identify approval work', 'Give a name or role for the person who reviews changes and decisions. Include any checks that must happen before a message is sent, a record changes or a page goes live.'],
-        ['Ask how it will be reviewed', 'Agree when to compare the estimate with actual work. Use a small sample of finished items and exceptions to see which assumptions need updating.']
-      ]
-    },
-    {
-      id: 'pricing-scenarios', title: "Compare two scopes using the same workload.",
-      intro: "Imagine a queue with routine messages and a smaller set that need a manager. The workload is the same in both cases below. The difference is who handles review and how much availability the scope needs.",
-      visual: [["Describe the queue", "Compare coverage", "Check the scope"], ["mail", "calendar", "check"]],
-      items: [
-        ["A scheduled review window", "The assistant checks the queue at agreed times, handles approved replies and collects exceptions for one review. This works when requests can wait for the next window and the manager can clear the decision list in one pass."],
-        ["Coverage across more of the day", "The assistant checks more often and flags time-sensitive cases as they arrive. Ask who is available to review those cases, whether the extra checks need specialist skills and how gaps in coverage are handled."],
-        ["What to compare on the quote", "Use the same weekly volume, peak volume and expected result for both scopes. Ask which time is included for onboarding, documenting the work and coordinating approvals so both proposals describe the same level of service."]
-      ]
-    },
-    {
-      id: 'pricing-change-questions', title: "Ask how the quote handles a busy month.",
-      intro: "A recurring task can have predictable peaks and unexpected exceptions. Give each its own assumption so the team knows when a scope change is needed.",
-      items: [
-        ["Known busy periods", "Mark events, campaigns or monthly deadlines on the calendar. Share a previous busy week if one is available so the estimate reflects both the extra work and the dates when a reviewer is available."],
-        ["Unexpected requests", "Ask which work can wait until the normal window, what can be paused and who can approve extra capacity. A named approval contact makes it easier to handle the immediate queue without guessing about cost."],
-        ["Work that needs a specialist", "Point out requests involving specialist systems or decisions, such as a tracking change or a mass record update. Ask whether that work should be priced separately and which team member reviews it."]
-      ]
-    },
-    {
-      id: 'pricing-review', title: "Review the quote against the first month’s work.",
-      intro: "A scoped quote is easier to assess once you compare it with the work that actually arrived. Use one complete cycle to check the assumptions together.",
-      items: [
-        ["Actual volume and timing", "Count completed and blocked requests separately, then compare the total with what was estimated. Check when the requests arrived so a steady weekly count does not hide a busy day that needs different coverage."],
-        ["Work that takes longer", "Look at items that required several messages, a second reviewer or additional information. Decide whether to improve the instructions, move that task out of scope or adjust the amount of time allowed for it."],
-        ["Changes and approvals", "Write down which assumptions changed and get the revised scope reviewed before the next cycle. Keep the decision and start date with the quote so the team can compare like for like later."]
       ]
     }
   ],
