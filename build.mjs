@@ -118,7 +118,7 @@ const cards=(items,cls='')=>`<div class="card-grid ${cls}">${items.map(([h,p,sym
 const steps=(items,level='h3')=>`<ol class="steps">${items.map(([h,p],i)=>`<li><span class="step-number">${String(i+1).padStart(2,'0')}</span>${cardHeading(h,cardIcon(h),level)}<p>${p}</p></li>`).join('')}</ol>`;
 const faq=(items,id='')=>{
  if (items.length<6) throw new Error('FAQ sections need at least six questions.');
- return section(intro('Frequently Asked Questions')+`<div class="faq-list">${items.map(([q,a])=>`<details><summary>${q}<span aria-hidden="true"></span></summary><p>${a}</p></details>`).join('')}</div>`,'',id);
+ return section(`<div class="faq-content">${intro('Frequently Asked Questions')}<div class="faq-list">${items.map(([q,a])=>`<details><summary>${q}<span aria-hidden="true"></span></summary><p>${a}</p></details>`).join('')}</div></div>`,'faq-section',id);
 };
 const invitation=(page)=>{
  const url = companyHeroForms.has(page) ? enquiryAnchor : page==='contact.html' ? '#contact-form' : enquiryPageUrl;
@@ -287,7 +287,7 @@ function header(page){
      ${link('services.html','View all services')}
     </div>
    </details>
-   ${nav('how-it-works.html','How it works',page)}${nav('about.html','About Us',page)}${nav('pricing.html','Pricing',page)}
+   ${nav('industries.html','Industries',page)}${nav('how-it-works.html','How it works',page)}${nav('about.html','About Us',page)}${nav('pricing.html','Pricing',page)}
    <a class="mobile-contact" href="${enquiryUrl}">${enquiryLabel}</a>
   </nav><div class="header-cta">${call(enquiryUrl)}</div></div></header>`;
 }
@@ -299,9 +299,13 @@ const footer=(page)=>`<footer class="site-footer" id="site-footer"><div class="w
  </div>
  <nav class="footer-column" aria-label="Services">
   <p class="footer-title">Services</p>
-  <div class="footer-links">${nav('administrative-support.html','Admin support',page)}${nav('accounting-bookkeeping.html','Bookkeeping',page)}${nav('customer-support.html','Customer support',page)}${nav('crm-lead-operations.html','Sales and CRM',page)}${nav('marketing-content.html','Marketing and content',page)}${nav('services.html','View all services',page)}</div>
+  <div class="footer-links">${nav('services.html','All services',page)}${services.map(service=>nav(serviceURL(service),service.label,page)).join('')}</div>
  </nav>
- <nav class="footer-column" aria-label="Company">
+ <nav class="footer-column" aria-label="Industries">
+  <p class="footer-title">Industries</p>
+  <div class="footer-links">${nav('industries.html','All industries',page)}${industries.map(industry=>nav(industryURL(industry),industry.name,page)).join('')}</div>
+ </nav>
+ <nav class="footer-column footer-company" aria-label="Company">
   <p class="footer-title">Company</p>
   <div class="footer-links">${nav('about.html','About us',page)}${nav('how-it-works.html','How it works',page)}${nav('pricing.html','Pricing',page)}${nav('industries.html','Industries',page)}${nav('trust.html','Trust and security',page)}${nav(privacyPolicyUrl,'Privacy Policy',page)}</div>
  </nav>
@@ -454,7 +458,8 @@ const homepage=hero({
    ['Agree the details','We confirm the scope, schedule, access and person who will review the work.'],
    ['Stay up to date','Receive the agreed updates, review results and adjust the workload as needed.']
  ])+link('how-it-works.html','How it works'),'','first-workflow')
- + section(`<div class="founder-layout founder-preview"><div>${intro('Meet our founder, Anuj Gupta','AssistLane Global supports founders and growing teams with clear responsibilities, agreed instructions and regular updates. Founder Anuj Gupta brings more than 25 years of experience building teams and products.')}${link('about.html','About AssistLane Global')}${link('trust.html','How we handle access')}</div>${founderProfile}</div>`,'','meet-the-founder')
+ + section(`<div class="split align-center industry-overview"><div>${intro('Support for your industry','Explore virtual assistant support for finance, real estate, online stores, marketing teams, technology businesses and professional services. See how tasks, tools and responsibilities fit your working day.')}${link('industries.html','Explore all industries')}</div>${photo('operations')}</div>`,'','industry-overview')
+ + section(`<div class="founder-layout founder-preview"><div>${intro('Meet our founder','AssistLane Global supports founders and growing teams with clear responsibilities, agreed instructions and regular updates. Founder Anuj Gupta brings more than 25 years of experience building teams and products.')}<div class="section-links">${link('about.html','About AssistLane Global')}${link('trust.html','How we handle access')}</div></div>${founderProfile}</div>`,'','meet-the-founder')
  + faq([
    ['What can I delegate?','Start with admin, customer enquiries, CRM updates, research or content coordination. The Services page has the full range.'],
    ['Can I start with one task?','Yes. Agree one recurring task, the expected result and how you will review it.'],

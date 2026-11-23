@@ -74,6 +74,10 @@ def main():
     docs = {file.name: Document(file.read_text(encoding='utf-8')) for file in sorted(DIST.glob('*.html'))}
     assert set(docs) == set(legacy) == set(counts) == set(density), 'Page paths changed'
     assert len(docs) == 33
+    industry_pages = {file for file in docs if file.startswith('industry-')}
+    company_pages = {'index.html', 'how-it-works.html', 'pricing.html', 'about.html', 'trust.html', 'contact.html', 'privacy-policy.html', '404.html'}
+    service_pages = set(docs) - industry_pages - company_pages - {'industries.html', 'services.html'}
+    assert len(industry_pages) == 11 and len(service_pages) == 12
     form_count = link_count = target_count = 0
     external_links = set()
     ids_by_file = {}
@@ -93,6 +97,14 @@ def main():
         assert len([n for n in nodes if n.tag == 'h1']) == 1, file
         canonical = [n.attrs.get('href') for n in nodes if n.tag == 'link' and n.attrs.get('rel') == 'canonical']
         assert canonical == [ORIGIN + ('' if file == 'index.html' else file)], file
+        footer = next(n for n in nodes if n.tag == 'footer')
+        footer_navs = {n.attrs.get('aria-label'): n for n in footer.nodes() if n.tag == 'nav'}
+        for label, expected in [('Services', service_pages | {'services.html'}), ('Industries', industry_pages | {'industries.html'})]:
+            assert label in footer_navs, (file, 'Missing footer directory', label)
+            linked = {urlsplit(n.attrs['href']).path.lstrip('/') for n in footer_navs[label].nodes() if n.tag == 'a'}
+            assert linked == expected, (file, 'Incomplete footer directory', label, expected - linked)
+        header = next(n for n in nodes if n.tag == 'header')
+        assert any(n.tag == 'a' and n.attrs.get('href', '').lstrip('/') == 'industries.html' for n in header.nodes()), (file, 'Industry directory missing from navigation')
         text = document.root.text()
         assert 'support@assistlaneglobal.com' in text, file
         assert '+917011956780' in re.sub(r'\s', '', text), file
@@ -170,7 +182,7 @@ def main():
     for reference in re.findall(r'url\([\'\"]?([^\)\'\"]+)', (DIST / 'site.css').read_text(encoding='utf-8')):
         if reference.startswith('data:'): continue
         assert (DIST / reference.split('?')[0]).is_file(), ('CSS asset', reference)
-    print(json.dumps({'pages':len(docs), 'forms':form_count, 'html_and_heading_hierarchy':'passed', 'internal_references':link_count, 'original_routes_and_anchors':'preserved', 'independent_word_counts':'matched', 'primary_keyword_pages_at_exactly_2_percent':target_count, 'external_links':sorted(external_links)}, indent=2))
+    print(json.dumps({'pages':len(docs), 'forms':form_count, 'footer_service_pages':len(service_pages), 'footer_industry_pages':len(industry_pages), 'html_and_heading_hierarchy':'passed', 'internal_references':link_count, 'original_routes_and_anchors':'preserved', 'independent_word_counts':'matched', 'primary_keyword_pages_at_exactly_2_percent':target_count, 'external_links':sorted(external_links)}, indent=2))
 
 
 if __name__ == '__main__':

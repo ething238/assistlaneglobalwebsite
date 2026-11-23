@@ -261,7 +261,10 @@ export const keywordNotes = {
 };
 
 const copyPolish = {
-  'index.html': [['a practical way to help.', 'a practical way to help your team with its everyday workload.']],
+  'index.html': [
+    ['a practical way to help.', 'a practical way to help your team with its everyday workload.'],
+    ['Think about when the work arrives and when someone needs to act on it. A short daily update may suit a busy inbox, while a weekly review may suit research or publishing coordination. Explain which requests can wait and which should reach a named person promptly. If your priorities change, update the task list and the review schedule together. This helps your team understand the available support without treating every message as an urgent interruption. The right arrangement depends on the work you agree, rather than a promise of unlimited availability.', 'Plan support around when work arrives and when someone needs to act. Use a daily update for an inbox or a weekly review for research and publishing. Name urgent requests, identify the person who handles them and update the task list and review schedule. Agree coverage around the work instead of expecting every message to receive an immediate response.']
+  ],
   'services.html': [['Start with one recurring task that you can explain and review.', 'Start with one recurring task that you can explain and review using the tools your team already knows.']],
   'administrative-support.html': [['Open the topics that matter to your team. These details explain how to prepare the work, review results and handle changes.', 'Prepare and review work.']],
   'customer-support.html': [['In this example, a customer writes to the support inbox about a delayed order, then opens a second ticket from another channel. The first response should reflect the latest order record, avoid duplicate promises and leave a clear owner for any exception. The same pattern works for a delayed service appointment.', 'A customer asks about a delay on two channels. Connect replies and assign exception owners.']],
