@@ -587,11 +587,6 @@ body{font-size:16px;line-height:1.7;background:#fff}
 @media(max-width:520px){.enquiry-fields,.enquiry-optional-fields{grid-template-columns:1fr}.hero .hero-grid h1{font-size:36px}#daily-support .card-grid{grid-template-columns:1fr}.enquiry .field input,.enquiry .field select,.enquiry .field textarea{font-size:16px}.enquiry-consent{font-size:13px}}
 
 /* Short menus and a quieter homepage keep the next step easy to find. */
-.simple-service-menu{display:grid}
-.simple-service-menu a{display:block;padding:10px 12px;border-radius:5px;text-decoration:none;font-size:15px;line-height:1.5}
-.simple-service-menu a:hover,.simple-service-menu a[aria-current]{background:#eef3fb}
-.services-menu .menu-panel{padding:8px;border-radius:8px}
-.services-menu .menu-panel>.text-link{display:block;margin-top:6px;padding:10px 12px;border-top:1px solid var(--border);font-size:15px;font-weight:600}
 .home-hero .actions{margin-top:18px}
 .home-hero .actions .text-link{color:#e3f4ff;text-decoration:underline;text-underline-offset:4px}
 .home-services-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:26px}
@@ -609,7 +604,6 @@ body{font-size:16px;line-height:1.7;background:#fff}
 .footer-grid{grid-template-columns:minmax(0,1.5fr) repeat(2,minmax(0,1fr));gap:40px}
 .site-footer .footer-brand>p{max-width:32ch}
 #footer-cta-title{font-size:clamp(32px,4vw,48px);max-width:22ch}
-@media(min-width:1024px){.services-menu{position:relative}.services-menu .menu-panel{left:0;transform:none;width:270px}}
 @media(max-width:900px){.home-services-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.footer-grid{gap:26px}}
 @media(max-width:600px){.home-services-grid{grid-template-columns:1fr;gap:12px}.home-service{padding:20px}.footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 20px}.footer-brand{grid-column:1/-1}.home-hero .hero-grid{gap:24px}}
 
@@ -674,4 +668,15 @@ main .card-heading{gap:0}
 @media(max-width:1023px){.footer-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}.footer-brand{grid-column:1/-1}}
 @media(max-width:767px){.industry-overview{grid-template-columns:1fr}.industry-overview .editorial-image{justify-self:start;width:100%}.faq-content>.section-intro{margin-bottom:20px}}
 @media(max-width:600px){.footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 20px}.footer-company{grid-column:1/-1}.footer-company .footer-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 20px}}
+
+/* Both dropdowns show their complete directory with a graphic for each entry. */
+.navigation .menu-panel{padding:16px;border-radius:10px}
+.navigation .menu-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0}
+.navigation .menu-grid>a{min-width:0;min-height:58px;gap:12px;padding:10px 12px;background:#f3f6fc;border:1px solid transparent;border-radius:7px;font-size:16px;font-weight:600;line-height:1.4}
+.navigation .menu-grid>a:hover,.navigation .menu-grid>a[aria-current]{background:#e8efff;border-color:#b8c9ed}
+.navigation .menu-grid>a>svg{width:38px;height:38px;padding:8px;border-radius:7px;background:#e1eaff;color:#2456e8;flex:none}
+.navigation .menu-grid>a>span{min-width:0}
+@media(min-width:1024px){.navigation,.navigation .nav-dropdown{position:static}.navigation .menu-panel{width:min(780px,calc(100vw - var(--pad) * 2));left:50%;transform:translateX(-50%);max-height:calc(100dvh - 120px)}}
+@media(max-width:1023px){.navigation{max-height:calc(100dvh - 70px)}}
+@media(max-width:767px){.navigation .menu-grid{grid-template-columns:1fr}.navigation .menu-panel{padding:10px}.navigation .menu-grid>a{min-height:54px;font-size:15px}}
 @media(max-width:767px){.content-page .section{padding-block:38px}.content-page .card-grid{grid-template-columns:1fr}.reader-detail>summary{padding:16px;font-size:17px}.reader-detail-body{padding:18px;font-size:16px}.content-page .scope-table th,.content-page .scope-table td{padding:12px}}

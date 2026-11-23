@@ -273,7 +273,7 @@ function detailedWorkflow(guide, icons, renderIntro = intro) {
 
 function header(page){
  const chevron = '<svg aria-hidden="true" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor"><path d="m3 6 5 5 5-5"/></svg>';
- const menuServices = [['administrative-support','Admin support'],['accounting-bookkeeping','Bookkeeping'],['customer-support','Customer support'],['crm-lead-operations','Sales and CRM'],['marketing-content','Marketing and content']];
+ const menuLabel = label => label.replaceAll(' and ', ' &amp; ');
  const enquiryUrl = companyHeroForms.has(page) ? enquiryAnchor : enquiryPageUrl;
  return `<a class="skip" href="#main">Skip to content</a><header class="site-header"><div class="wrap header-row">
   <a class="brand" href="index.html" aria-label="${siteName} home">${brand}</a>
@@ -283,11 +283,16 @@ function header(page){
    <details class="nav-dropdown services-menu" name="primary-navigation">
     <summary aria-controls="services-dropdown">Services ${chevron}</summary>
     <div class="menu-panel" id="services-dropdown">
-     <div class="simple-service-menu">${menuServices.map(([id,label])=>nav(id+'.html',label,page)).join('')}</div>
-     ${link('services.html','View all services')}
+     <div class="menu-grid">${services.map(service=>`<a href="${serviceURL(service)}"${page===serviceURL(service)?' aria-current="page"':''}>${icon(service.icon)}<span>${menuLabel(service.label)}</span></a>`).join('')}</div>
     </div>
    </details>
-   ${nav('industries.html','Industries',page)}${nav('how-it-works.html','How it works',page)}${nav('about.html','About Us',page)}${nav('pricing.html','Pricing',page)}
+   <details class="nav-dropdown industries-menu" name="primary-navigation">
+    <summary aria-controls="industries-dropdown">Industries ${chevron}</summary>
+    <div class="menu-panel" id="industries-dropdown">
+     <div class="menu-grid">${industries.map(industry=>`<a href="${industryURL(industry)}"${page===industryURL(industry)?' aria-current="page"':''}>${icon(industry.icon)}<span>${menuLabel(industry.name)}</span></a>`).join('')}</div>
+    </div>
+   </details>
+   ${nav('how-it-works.html','How it works',page)}${nav('about.html','About Us',page)}${nav('pricing.html','Pricing',page)}
    <a class="mobile-contact" href="${enquiryUrl}">${enquiryLabel}</a>
   </nav><div class="header-cta">${call(enquiryUrl)}</div></div></header>`;
 }

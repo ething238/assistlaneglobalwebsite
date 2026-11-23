@@ -104,7 +104,15 @@ def main():
             linked = {urlsplit(n.attrs['href']).path.lstrip('/') for n in footer_navs[label].nodes() if n.tag == 'a'}
             assert linked == expected, (file, 'Incomplete footer directory', label, expected - linked)
         header = next(n for n in nodes if n.tag == 'header')
-        assert any(n.tag == 'a' and n.attrs.get('href', '').lstrip('/') == 'industries.html' for n in header.nodes()), (file, 'Industry directory missing from navigation')
+        for class_name, expected in [('services-menu', service_pages), ('industries-menu', industry_pages)]:
+            dropdown = next((n for n in header.nodes() if n.tag == 'details' and class_name in n.attrs.get('class', '').split()), None)
+            assert dropdown is not None, (file, 'Missing header dropdown', class_name)
+            entries = [n for n in dropdown.nodes() if n.tag == 'a']
+            linked = {urlsplit(n.attrs['href']).path.lstrip('/') for n in entries}
+            assert linked == expected, (file, 'Incomplete header dropdown', class_name, expected - linked)
+            for entry in entries:
+                graphic = next((n for n in entry.nodes() if n.tag == 'svg'), None)
+                assert graphic is not None and len(list(graphic.nodes())) > 1, (file, 'Missing navigation graphic', entry.text())
         text = document.root.text()
         assert 'support@assistlaneglobal.com' in text, file
         assert '+917011956780' in re.sub(r'\s', '', text), file
