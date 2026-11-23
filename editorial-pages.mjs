@@ -120,7 +120,7 @@ export function prepareEditorialPage(originalBody, file) {
   body=applyKeywordCopy(simplify(body),file).replace(/[\t ]+$/gm,'');
   const existingIds=new Set(Array.from(body.matchAll(/\bid="([^"]+)"/g),match=>match[1]));
   // Header/footer control IDs are retained there, rather than duplicated here.
-  for(const id of ['top','main','navigation','services-dropdown','site-footer','footer-cta','footer-cta-title']) existingIds.add(id);
+  for(const id of ['top','main','navigation','services-dropdown','industries-dropdown','site-footer','footer-cta','footer-cta-title']) existingIds.add(id);
   const aliases=(legacyAnchorIds[file]||[]).filter(id=>!existingIds.has(id)).map(id=>`<span id="${id}" class="legacy-anchor" aria-hidden="true"></span>`).join('');
   return body.replace('<section class="section reader-guide"',aliases+'<section class="section reader-guide"');
 }
