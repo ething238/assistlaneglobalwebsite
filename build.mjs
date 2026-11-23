@@ -454,7 +454,7 @@ const homepage=hero({
    ['Agree the details','We confirm the scope, schedule, access and person who will review the work.'],
    ['Stay up to date','Receive the agreed updates, review results and adjust the workload as needed.']
  ])+link('how-it-works.html','How it works'),'','first-workflow')
- + section(`<div class="founder-layout founder-preview"><div>${intro('People you can work with.','AssistLane Global supports founders and growing teams with clear responsibilities, agreed instructions and regular updates. Founder Anuj Gupta brings more than 25 years of experience building teams and products.')}${link('about.html','About AssistLane Global')}${link('trust.html','How we handle access')}</div>${founderProfile}</div>`,'','meet-the-founder')
+ + section(`<div class="founder-layout founder-preview"><div>${intro('Meet our founder, Anuj Gupta','AssistLane Global supports founders and growing teams with clear responsibilities, agreed instructions and regular updates. Founder Anuj Gupta brings more than 25 years of experience building teams and products.')}${link('about.html','About AssistLane Global')}${link('trust.html','How we handle access')}</div>${founderProfile}</div>`,'','meet-the-founder')
  + faq([
    ['What can I delegate?','Start with admin, customer enquiries, CRM updates, research or content coordination. The Services page has the full range.'],
    ['Can I start with one task?','Yes. Agree one recurring task, the expected result and how you will review it.'],
