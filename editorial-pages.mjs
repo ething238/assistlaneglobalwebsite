@@ -64,7 +64,7 @@ function candidateItems(section) {
   return items.length ? items : Array.from(section.matchAll(/<p(?:\s[^>]*)?>([\s\S]*?)<\/p>/g),match=>({group:title,title:'A practical starting point',copy:match[1]}));
 }
 
-const companyKeys={'about.html':'about','how-it-works.html':'how','pricing.html':'pricing','trust.html':'trust','contact.html':'contact'};
+const companyKeys={'about.html':'about','how-it-works.html':'how','trust.html':'trust','contact.html':'contact'};
 const companyIds=new Set(Object.values(companyGuides).flat().map(group=>group.id));
 const directoryIds=new Set([...siteGuides.services,...siteGuides.industries].map(group=>group.id));
 

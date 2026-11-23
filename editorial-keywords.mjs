@@ -207,18 +207,6 @@ export const keywordCopy = {
     ['A change in coverage, priority or personnel can disrupt a workflow if the current state lives in messages or personal notes.', 'Revisit the virtual assistant onboarding process when coverage, priorities or personnel change. A workflow is harder to continue if its current state lives in messages or personal notes.'],
     ['Your virtual assistant onboarding checklist should include a normal request, an exception, the expected output and the responsible reviewer.', 'For the virtual assistant onboarding process, prepare a normal request, an exception, the expected output and the responsible reviewer.']
   ],
-  'pricing.html': [
-    ['Use discovery to define a scope you can compare:', 'Discuss virtual assistant pricing through discovery and define a scope you can compare:'],
-    ['What affects the cost', 'What affects virtual assistant pricing'],
-    ['Expected volume, regular hours, time zone overlap and how quickly a task needs attention.', 'Virtual assistant pricing depends on expected volume, regular hours, time zone overlap and how quickly a task needs attention.'],
-    ['The systems involved, the level of specialist input and whether work spans several functions.', 'Virtual assistant pricing also reflects the systems involved, the level of specialist input and whether work spans several functions.'],
-    ['Documentation, onboarding, quality review, reporting and access setup.', 'Ask whether virtual assistant pricing includes documentation, onboarding, quality review, reporting and access setup.'],
-    ['Use examples of the work rather than one total for the whole queue.', 'Discuss virtual assistant pricing using examples of the work rather than one total for the whole queue.'],
-    ['Confirm what happens to instructions, open items and access if the scope ends or moves to another person.', 'When reviewing virtual assistant pricing, confirm what happens to instructions, open items and access if the scope ends or moves to another person.'],
-    ['A recurring task can have predictable peaks and unexpected exceptions.', 'A recurring task can have predictable peaks and unexpected exceptions that affect virtual assistant pricing.'],
-    ['Review the quote against the first month’s work.', 'Review virtual assistant pricing against the first month’s work.'],
-    ['Check the minimum term, notice period and cancellation rules in the proposed agreement.', 'Assess virtual assistant pricing alongside the minimum term, notice period and cancellation rules in the proposed agreement.']
-  ],
   'about.html': [
     ['AssistLane Global provides virtual assistant support for founders and growing teams.', 'AssistLane Global is a virtual assistant company supporting founders and growing teams.'],
     ['Your virtual assistant team starts with a real example from your day.', 'Our virtual assistant company starts with a real example from your day.'],
@@ -252,7 +240,6 @@ export const keywordCopy = {
 };
 
 export const keywordNotes = {
-  'pricing.html': [{title:'Record the assumptions behind the quote',copy:'Keep the workload sample with the proposal. Note which tasks were included, which were excluded and when the estimate was prepared. If actual demand differs, compare the new requests with that sample before agreeing a change. This gives both teams a practical starting point for the next review.'}],
   'trust.html': [{title:'Check a handover before closing access',copy:'Choose one open item and confirm the next owner can reach its approved source. Record what remains unresolved and where the response should go. Ask the account owner to verify that the outgoing role has been removed, then save the confirmation beside the handover record.'}],
   'industry-healthcare.html': [{title:'Prepare a change of shift',copy:'Before the practice changes shifts, separate confirmed appointments from requests still waiting on a document or decision. Check that each open item has the practice reference, next action and approved contact route. Avoid including clinical details in a general status message. Tell the receiving owner when the patient was last contacted and whether another update was promised. If a referral or billing question remains unresolved, keep it in its own queue with the responsible reviewer. A shift handover should help the next person continue the existing conversation without asking the patient to repeat their request.'}],
   'industry-legal.html': [{title:'Review an open matter handover',copy:'Before a matter changes hands, compare the current file list with the approved checklist. Identify missing documents, unanswered requests and reminders awaiting confirmation. Keep the original correspondence available to the authorised reviewer, with its date and source intact. Explain what the client has already been told and when the next response is due. The receiving professional should be able to distinguish completed administration from a decision that still requires their judgment.'}],
@@ -278,7 +265,6 @@ const copyPolish = {
   'industry-ai-technology.html': [['Record the promised follow-up date so it survives a shift change.', 'Record the promised follow-up date so it survives a shift change. Track the customer update separately from engineering progress, so an investigation does not leave a promised reply unowned.']],
   'industry-professional-services.html': [['An authorised person at the firm approves terms, fees and issuance.', 'An authorised person at the firm approves terms, fees and issuance through the agreed channel.']],
   'how-it-works.html': [['Write down the change and show an example.', 'Write down the change and show an example. Keep the example with the instructions so future requests start with the same format and decision rules.']],
-  'pricing.html': [['This gives both teams a practical starting point for the next review.', 'This gives both teams a basis for review.']],
   'about.html': [['more than 25 years of experience building teams and launching products.', 'over 25 years of experience building teams and products.']],
   'trust.html': [['before sharing accounts or records.', 'before sharing accounts or records with another person.']],
   'contact.html': [['Agree where decision requests should sit and what supporting links should be included so the reviewer can move faster.', 'Agree where decision requests should sit and what supporting links should be included so the reviewer can move faster. Keep the example beside the brief, with its source and approval status, so everyone reviewing the batch uses the same reference.']],

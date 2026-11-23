@@ -279,7 +279,7 @@ function header(page){
      <div class="menu-grid">${industries.map(industry=>`<a href="${industryURL(industry)}"${page===industryURL(industry)?' aria-current="page"':''}>${icon(industry.icon)}<span>${menuLabel(industry.name)}</span></a>`).join('')}</div>
     </div>
    </details>
-   ${nav('how-it-works.html','Our Process',page)}${nav('pricing.html','Pricing',page)}
+   ${nav('how-it-works.html','Our Process',page)}${nav('trust.html','Trust and Security',page)}
    <a class="mobile-contact" href="${enquiryUrl}">${enquiryLabel}</a>
   </nav><div class="header-cta">${call(enquiryUrl)}</div></div></header>`;
 }
@@ -299,7 +299,7 @@ const footer=(page)=>`<footer class="site-footer" id="site-footer"><div class="w
  </nav>
  <nav class="footer-column footer-company" aria-label="Company">
   <p class="footer-title">Company</p>
-  <div class="footer-links">${nav('about.html','About us',page)}${nav('how-it-works.html','Our Process',page)}${nav('pricing.html','Pricing',page)}${nav('industries.html','Industries',page)}${nav('trust.html','Trust and security',page)}${nav(privacyPolicyUrl,'Privacy Policy',page)}</div>
+  <div class="footer-links">${nav('about.html','About us',page)}${nav('how-it-works.html','Our Process',page)}${nav('industries.html','Industries',page)}${nav('trust.html','Trust and Security',page)}${nav(privacyPolicyUrl,'Privacy Policy',page)}</div>
  </nav>
  </div><div class="footer-utility">
   ${link(enquiryPageUrl,enquiryLabel,'footer-action')}
@@ -557,7 +557,7 @@ const industryDirectory = hero({
     ['Select the work','Pick a recurring queue, a regular deadline or a handoff that keeps falling between teams.'],
     ['Set the guardrails','Agree account access, approvals and the decisions that require specialist expertise.'],
     ['Review the capacity','Estimate typical and peak volumes, time zone overlap and who reviews completed work.']
-  ])+`<div class="actions">${link('services.html','Compare services')}${link('pricing.html','See how pricing is scoped')}</div>`)
+  ])+`<div class="actions">${link('services.html','Compare services')}${link(enquiryPageUrl,'Discuss the support you need')}</div>`)
  + editorialGuide(siteGuides.industries)
  + faq(pageQuestions.industries,'industry-faq');
 
@@ -597,24 +597,6 @@ const how = hero({title:'How it works',copy:'Start with a clear scope, test a sm
  + section(intro('Decide whether to expand the scope.')+list(['Compare the result with the example you provided. Note any changes needed to tone, format or accuracy.','Check whether routine work could proceed and whether exceptions reached the right person.','Update the instructions, coverage and permissions before adding another queue or system.']))
  + editorialGuide(companyGuides.how)
  + faq(pageQuestions.how,'how-faq');
-
-const pricing = hero({title:'Pricing for the work you need',copy:'Use discovery to define a scope you can compare: the tasks, capacity, coverage, specialist skills and review responsibilities.',tone:'sky',secondary:link('#quote','See what shapes a quote'),visual:workflowIllustration(['List the tasks','Estimate capacity','Review the scope'],['content','calendar','ledger'])})
- + section(intro('What affects the cost')+cards([['Time and coverage','Expected volume, regular hours, time zone overlap and how quickly a task needs attention.'],['Skills and complexity','The systems involved, the level of specialist input and whether work spans several functions.'],['Setup and oversight','Documentation, onboarding, quality review, reporting and access setup. See <a href="how-it-works.html#delivery-example">what the first handoff involves</a>.']]),'','quote')
- + section(intro('Compare scope and terms together.')+`<div class="comparison">${[['Capacity','Hours or expected volume; overage rules; time zone and coverage.'],['Included work','Tasks, deliverables, tools, reviews and approval limits.'],['Fees and billing','Currency, billing period, setup fees and any specialist or tool charges.'],['Changes and continuity','How scope changes, handovers, unused capacity and gaps in coverage are handled.'],['Commitment','Start date, renewal, notice and cancellation terms.']].map(([h,p])=>`<div>${cardHeading(h)}<p>${p}</p></div>`).join('')}</div>`,'warm')
- + section(intro('Two ways to define the work')+cards([['Recurring admin','A daily inbox review and a weekly calendar check. Estimate typical volume, time zone overlap and how often an approval is needed.'],['Content publication','An approved article queue. Define expected volume, formatting and on-page checks, and which changes need specialist review.']],'two'),'sky')
- + section(intro('Bring enough detail for a useful quote.','A small sample of real work makes it easier to separate execution time, review time and special cases.')+matrix(['Input','What to bring','Why it changes the scope'],[
-   ['Volume','Typical and peak weekly item counts.','Surges may require extra coverage or different turnaround targets.'],
-   ['Complexity','A routine example and an exception.','They show the difference between checklist work and work that needs judgment.'],
-   ['Coverage','Time zone, response windows and deadlines.','Overlap and urgent availability affect how the work is scheduled.'],
-   ['Approval load','Who signs off and how often.','Review time and blocked items affect the capacity you can use.']
- ]))
- + section(intro('Know when to revisit the quote.','Write down changes in workload, coverage or approval authority so both teams can compare the old scope with the new one.')+cards([
-   ['A temporary peak','If an event or launch increases volume, define the extra work and the dates it applies to.'],
-   ['A recurring change','If an additional queue becomes part of the regular workload, revisit capacity and assign someone to review the output.'],
-   ['A higher-risk task','If the work needs broader permissions or a new approval rule, review <a href="trust.html#access-changes">how to approve access changes</a> before expanding the scope.']
- ]),'mint','scope-changes','data-review')
- + editorialGuide(companyGuides.pricing)
- + faq(pageQuestions.pricing,'pricing-faq');
 
 const about = hero({
  title:aboutLabel,
@@ -754,7 +736,6 @@ const pages=[
  ['industries.html','Virtual Assistant Support by Industry','Explore industry playbooks with sample workflows, responsibilities and approval boundaries.',industryDirectory],
  ...industries.map(industry=>[industryURL(industry),industry.headline,industry.summary,industryPage(industry)]),
  ['how-it-works.html','How It Works','From discovery and onboarding through review and continuity.',how],
- ['pricing.html','Pricing and Plans','Understand what shapes the scope and price of virtual assistant support.',pricing],
  ['about.html','About','Learn what the company does, meet founder Anuj Gupta and see how delivery roles fit together.',about],
  ['trust.html','Trust and Security','Plan account access, approvals, data handling and continuity.',trust],
  ['contact.html','Contact','Tell us about the work you need virtual assistant support with.',contact],

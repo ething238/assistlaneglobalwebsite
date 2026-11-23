@@ -173,29 +173,6 @@ export const pageQuestions = {
       "A new queue should have its own inputs, review owner and approval rules. Test a small batch and confirm that the original work still receives the agreed attention before expanding the ongoing scope."
     ]
   ],
-  "pricing": [
-    questions[4],
-    [
-      "What if my workload changes?",
-      "Ask how extra work is approved, billed or rescheduled, and what happens to unused capacity."
-    ],
-    [
-      "Is there a minimum commitment?",
-      "Check the minimum term, notice period and cancellation rules in the proposed agreement."
-    ],
-    [
-      "What information makes a quote more useful?",
-      "Share normal and peak volumes, the tools involved, coverage windows and examples of routine and unusual requests. Virtual assistant pricing is easier to compare when each proposal uses the same workload and expected result."
-    ],
-    [
-      "Do hourly rates include setup and review time?",
-      "Ask for setup, execution, reporting and review responsibilities to be stated in the scope. When comparing virtual assistant hourly rates, check which activities are included and who approves any extra work or specialist input."
-    ],
-    [
-      "How should we compare two proposals?",
-      "Compare the tasks, expected volume, coverage and approval responsibilities together. The cost of hiring a virtual assistant should be considered alongside the output you receive and the time your own team will spend providing input and reviewing work."
-    ]
-  ],
   "about": [
     [
       "Who will work on my account?",

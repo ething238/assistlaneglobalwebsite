@@ -7,7 +7,6 @@ const pageCuts = {
   'about.html': ['team-coordination', 'first-conversation', 'working-relationships'],
   'contact.html': ['brief-coverage-example', 'brief-review-checklist', 'brief-first-review'],
   'how-it-works.html': ['first-month-review', 'delivery-expansion'],
-  'pricing.html': ['cost-questions', 'pricing-review'],
   'trust.html': ['escalation-record'],
   'mobile-app-development.html': ['mobile-launch-and-support', 'mobile-handover'],
   'website-development.html': ['website-content-and-ownership', 'website-launch-review'],
