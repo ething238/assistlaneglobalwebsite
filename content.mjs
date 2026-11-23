@@ -256,7 +256,7 @@ export const pageQuestions = {
     ],
     [
       "Do I need every field to get started?",
-      "Yes. Enter your name, company name, email and phone number, then describe the work you need help with."
+      "No. Your name, email, a description of the work and consent to be contacted are required. Phone, company, start date and time zone are optional."
     ],
     [
       "What makes a task description useful?",

@@ -1,4 +1,20 @@
-'use strict';
+import { sendEnquiry } from './form-delivery.js';
+
+function openLinkedDetail() {
+  let id;
+  try { id = decodeURIComponent(window.location.hash.slice(1)); } catch { return; }
+  const target = id && document.getElementById(id);
+  if (!target) return;
+  let detail = target.closest('details');
+  if (!detail) return;
+  while (detail) {
+    detail.open = true;
+    detail = detail.parentElement?.closest('details');
+  }
+  target.scrollIntoView();
+}
+window.addEventListener('hashchange', openLinkedDetail);
+openLinkedDetail();
 // Animate only cards as they enter view. Content stays readable without JS or motion.
 const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
 if (!motionPreference.matches && 'IntersectionObserver' in window) {
@@ -151,15 +167,69 @@ if (inboxEstimator) {
   updateEstimate();
 }
 
-const enquiryForm = document.querySelector('#enquiry');
-if (enquiryForm) {
-  const status = enquiryForm.querySelector('.enquiry-status');
-  enquiryForm.addEventListener('submit', event => {
+for (const form of document.querySelectorAll('[data-enquiry-form]')) {
+  const status = form.querySelector('.enquiry-status');
+  const fieldset = form.querySelector('fieldset');
+  const button = form.querySelector('button[type="submit"]');
+  const phone = form.querySelector('[name="phone"]');
+  const description = form.querySelector('[name="description"]');
+  const deliveryReady = Boolean(form.querySelector('[name="access_key"]').value.trim());
+  let sending = false;
+
+  function validateInput(input) {
+    if (input === phone) {
+      const value = phone.value.trim();
+      const digits = value.replace(/\D/g, '');
+      phone.setCustomValidity(value && (!/^\+?[\d\s().-]+$/.test(value) || digits.length < 7 || digits.length > 15) ? 'Enter a valid phone number with its country code.' : '');
+    }
+    if (input === description) description.setCustomValidity(description.value && !description.value.trim() ? 'Please describe the support you need.' : '');
+  }
+
+  form.addEventListener('input', event => {
+    validateInput(event.target);
+    if (!sending && deliveryReady) {
+      status.textContent = '';
+      status.classList.remove('is-error', 'is-success');
+    }
+  });
+
+  form.addEventListener('submit', async event => {
     event.preventDefault();
-    status.textContent = 'All required fields are complete.';
-  });
-  enquiryForm.addEventListener('input', () => {
+    if (!deliveryReady) return;
+    if (sending) return;
+    validateInput(phone);
+    validateInput(description);
+    if (!form.reportValidity()) return;
+    const values = Object.fromEntries(Array.from(new FormData(form), ([name, value]) => [name, String(value).trim()]));
+    if (values.botcheck) return;
+    const sourcePage = window.location.origin + window.location.pathname;
+    const attribution = Object.fromEntries(['utm_source','utm_medium','utm_campaign','utm_term','utm_content','gclid'].map(name => [name, new URLSearchParams(window.location.search).get(name) || '']));
+    const message = [
+      ['Name', values.name], ['Email', values.email], ['Phone', values.phone],
+      ['Company', values.company], ['Support needed', values.service],
+      ['Requirements', values.description], ['Preferred start date', values.startDate],
+      ['Time zone', values.timeZone], ['Source page', sourcePage]
+    ].filter(([, value]) => value).map(([name, value]) => `${name}: ${value}`).join('\n');
+    sending = true;
+    fieldset.disabled = true;
+    form.setAttribute('aria-busy', 'true');
+    button.textContent = 'Sending your enquiry…';
     status.textContent = '';
+    status.classList.remove('is-error', 'is-success');
+    try {
+      await sendEnquiry({ name: values.name, email: values.email, phone: values.phone, company: values.company, service: values.service, description: values.description, startDate: values.startDate, timeZone: values.timeZone, consent: values.consent, message, source_page: sourcePage, ...attribution }, values.access_key);
+      form.reset();
+      status.textContent = 'Your enquiry has been sent. Thank you. Our team will contact you to discuss the next steps.';
+      status.classList.add('is-success');
+      button.textContent = 'Send another enquiry';
+    } catch (error) {
+      status.textContent = error.message;
+      status.classList.add('is-error');
+      button.textContent = 'Try again';
+    } finally {
+      sending = false;
+      fieldset.disabled = false;
+      form.removeAttribute('aria-busy');
+    }
   });
-  enquiryForm.querySelector('button[type="submit"]').disabled = false;
 }
