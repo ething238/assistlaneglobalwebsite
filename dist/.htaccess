@@ -1,7 +1,27 @@
 # AssistLane Global static HTML site
-Options -Indexes
+Options -Indexes -MultiViews
 DirectoryIndex index.html
 ErrorDocument 404 /404.html
+RewriteEngine On
+
+# THE_REQUEST prevents a clean URL's internal .html rewrite from redirecting again.
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{THE_REQUEST} \s/+(?:dist/)?index(?:\.html)?(?:[?\s]) [NC]
+RewriteRule ^index(?:\.html)?$ / [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{THE_REQUEST} \s/+(?:dist/)?[a-z0-9-]+\.html(?:[?\s]) [NC]
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^([a-z0-9-]+)\.html$ /$1 [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+RewriteRule ^([a-z0-9-]+)/$ /$1 [R=301,L]
+
+# Serve the existing file while keeping the browser URL extensionless.
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^([a-z0-9-]+)$ $1.html [L]
 
 # Do not expose hidden files or repository metadata.
 <FilesMatch "^\.">
