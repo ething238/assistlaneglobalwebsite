@@ -42,7 +42,7 @@ class CleanURLs(unittest.TestCase):
                 status, headers, content = self.request(path)
                 self.assertEqual(status, 200)
                 self.assertIn('text/html', headers['Content-type'])
-                self.assertIn(f'href="https://assistlaneglobal.com{path}"'.encode(), content)
+                self.assertIn(f'href="https://www.assistlaneglobal.com{path}"'.encode(), content)
                 status, _, content = self.request(path, 'HEAD')
                 self.assertEqual(status, 200)
                 self.assertEqual(content, b'')

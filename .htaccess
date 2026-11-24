@@ -7,22 +7,26 @@ RewriteEngine On
 # Redirect browser requests, not internal rewrites, to the public clean URL.
 RewriteCond %{ENV:REDIRECT_STATUS} ^$
 RewriteCond %{THE_REQUEST} \s/+(?:dist/)?index(?:\.html)?(?:[?\s]) [NC]
-RewriteRule ^(?:dist/)?index(?:\.html)?$ / [R=301,L]
+RewriteRule ^(?:dist/)?index(?:\.html)?$ https://www.assistlaneglobal.com/ [R=301,L]
 
 # Check the requested filename, not a subsequent internal 404 document.
 RewriteCond %{ENV:REDIRECT_STATUS} ^$
 RewriteCond %{THE_REQUEST} \s/+(?:dist/)?([a-z0-9-]+)\.html(?:[?\s]) [NC]
 RewriteCond %{DOCUMENT_ROOT}/dist/%1.html -f
-RewriteRule ^(?:dist/)?([a-z0-9-]+)\.html$ /$1 [R=301,L]
+RewriteRule ^(?:dist/)?([a-z0-9-]+)\.html$ https://www.assistlaneglobal.com/$1 [R=301,L]
 
 RewriteCond %{ENV:REDIRECT_STATUS} ^$
 RewriteCond %{THE_REQUEST} \s/+dist/[a-z0-9-]+(?:[/?\s]) [NC]
 RewriteCond %{DOCUMENT_ROOT}/dist/$1.html -f
-RewriteRule ^dist/([a-z0-9-]+)/?$ /$1 [R=301,L]
+RewriteRule ^dist/([a-z0-9-]+)/?$ https://www.assistlaneglobal.com/$1 [R=301,L]
 
 RewriteCond %{ENV:REDIRECT_STATUS} ^$
 RewriteCond %{DOCUMENT_ROOT}/dist/$1.html -f
-RewriteRule ^([a-z0-9-]+)/$ /$1 [R=301,L]
+RewriteRule ^([a-z0-9-]+)/$ https://www.assistlaneglobal.com/$1 [R=301,L]
+
+# Keep the preferred hostname on every page, preserving its path and query.
+RewriteCond %{HTTP_HOST} ^assistlaneglobal\.com(?::[0-9]+)?$ [NC]
+RewriteRule ^ https://www.assistlaneglobal.com%{REQUEST_URI} [R=301,L,NE]
 
 # Keep explicit /dist assets and internal page rewrites intact.
 RewriteRule ^dist/ - [L]

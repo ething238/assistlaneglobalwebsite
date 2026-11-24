@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 Disallow: /404
-Sitemap: https://assistlaneglobal.com/sitemap.xml
+Sitemap: https://www.assistlaneglobal.com/sitemap.xml

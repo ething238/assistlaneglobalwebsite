@@ -777,5 +777,5 @@ ${publicPages.map(([file]) => `  <url><loc>${siteOrigin}${publicPagePath(file)}<
 </urlset>
 `;
 await writeFile(new URL('sitemap.xml',dir),sitemap);
-await writeFile(new URL('robots.txt',dir),'User-agent: *\nAllow: /\nDisallow: /404\nSitemap: https://assistlaneglobal.com/sitemap.xml\n');
+await writeFile(new URL('robots.txt',dir),`User-agent: *\nAllow: /\nDisallow: /404\nSitemap: ${siteOrigin}/sitemap.xml\n`);
 

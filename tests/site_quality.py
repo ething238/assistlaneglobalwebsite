@@ -9,7 +9,7 @@ import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / 'dist'
-ORIGIN = 'https://assistlaneglobal.com/'
+ORIGIN = 'https://www.assistlaneglobal.com/'
 def public_path(file):
     return '/' if file == 'index.html' else '/' + file.removesuffix('.html')
 
