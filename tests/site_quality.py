@@ -10,6 +10,9 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / 'dist'
 ORIGIN = 'https://assistlaneglobal.com/'
+def public_path(file):
+    return '/' if file == 'index.html' else '/' + file.removesuffix('.html')
+
 WORDS = re.compile(r"[^\W_]+(?:[’'@.+-][^\W_]+)*", re.UNICODE)
 VOID = set('area base br col embed hr img input link meta param source track wbr'.split())
 NON_COPY = set('head script style noscript template svg canvas'.split())
@@ -96,20 +99,23 @@ def main():
             heading_level = level
         assert len([n for n in nodes if n.tag == 'h1']) == 1, file
         canonical = [n.attrs.get('href') for n in nodes if n.tag == 'link' and n.attrs.get('rel') == 'canonical']
-        assert canonical == [ORIGIN + ('' if file == 'index.html' else file)], file
+        assert canonical == [ORIGIN.rstrip('/') + public_path(file)], file
+        assert [n.attrs.get('content') for n in nodes if n.tag == 'meta' and n.attrs.get('property') == 'og:url'] == canonical, file
         footer = next(n for n in nodes if n.tag == 'footer')
         footer_navs = {n.attrs.get('aria-label'): n for n in footer.nodes() if n.tag == 'nav'}
         for label, expected in [('Services', service_pages | {'services.html'}), ('Industries', industry_pages | {'industries.html'})]:
             assert label in footer_navs, (file, 'Missing footer directory', label)
             linked = {urlsplit(n.attrs['href']).path.lstrip('/') for n in footer_navs[label].nodes() if n.tag == 'a'}
-            assert linked == expected, (file, 'Incomplete footer directory', label, expected - linked)
+            expected_paths = {public_path(name).lstrip('/') for name in expected}
+            assert linked == expected_paths, (file, 'Incomplete footer directory', label, expected_paths - linked)
         header = next(n for n in nodes if n.tag == 'header')
         for class_name, expected in [('services-menu', service_pages), ('industries-menu', industry_pages)]:
             dropdown = next((n for n in header.nodes() if n.tag == 'details' and class_name in n.attrs.get('class', '').split()), None)
             assert dropdown is not None, (file, 'Missing header dropdown', class_name)
             entries = [n for n in dropdown.nodes() if n.tag == 'a']
             linked = {urlsplit(n.attrs['href']).path.lstrip('/') for n in entries}
-            assert linked == expected, (file, 'Incomplete header dropdown', class_name, expected - linked)
+            expected_paths = {public_path(name).lstrip('/') for name in expected}
+            assert linked == expected_paths, (file, 'Incomplete header dropdown', class_name, expected_paths - linked)
             for entry in entries:
                 graphic = next((n for n in entry.nodes() if n.tag == 'svg'), None)
                 assert graphic is not None and len(list(graphic.nodes())) > 1, (file, 'Missing navigation graphic', entry.text())
@@ -172,13 +178,17 @@ def main():
             references = [node.attrs[name] for name in ('href', 'src') if name in node.attrs]
             references += [candidate.strip().split()[0] for candidate in node.attrs.get('srcset', '').split(',') if candidate.strip()]
             for reference in references:
-                parts = urlsplit(urljoin(ORIGIN + file, reference))
+                parts = urlsplit(urljoin(ORIGIN.rstrip('/') + public_path(file), reference))
                 if parts.scheme not in {'http', 'https'}:
                     continue
                 if parts.hostname not in {'assistlaneglobal.com', 'www.assistlaneglobal.com'}:
                     if node.tag == 'a': external_links.add(reference)
                     continue
                 path = unquote(parts.path).lstrip('/') or 'index.html'
+                if node.tag == 'a':
+                    assert not parts.path.endswith('.html'), (file, reference, 'Page link is not clean')
+                if '.' not in path and path + '.html' in docs:
+                    path += '.html'
                 target = (DIST / path).resolve()
                 assert target.is_relative_to(DIST.resolve()) and target.is_file(), (file, reference, 'Missing target')
                 if parts.fragment:
@@ -186,11 +196,11 @@ def main():
                 link_count += 1
     sitemap = ET.parse(DIST / 'sitemap.xml')
     locations = {element.text for element in sitemap.iter() if element.tag.endswith('}loc')}
-    assert locations == {ORIGIN + ('' if file == 'index.html' else file) for file in docs if file != '404.html'}
+    assert locations == {ORIGIN.rstrip('/') + public_path(file) for file in docs if file != '404.html'}
     for reference in re.findall(r'url\([\'\"]?([^\)\'\"]+)', (DIST / 'site.css').read_text(encoding='utf-8')):
         if reference.startswith('data:'): continue
         assert (DIST / reference.split('?')[0]).is_file(), ('CSS asset', reference)
-    print(json.dumps({'pages':len(docs), 'forms':form_count, 'footer_service_pages':len(service_pages), 'footer_industry_pages':len(industry_pages), 'html_and_heading_hierarchy':'passed', 'internal_references':link_count, 'original_routes_and_anchors':'preserved', 'independent_word_counts':'matched', 'primary_keyword_pages_at_exactly_2_percent':target_count, 'external_links':sorted(external_links)}, indent=2))
+    print(json.dumps({'pages':len(docs), 'forms':form_count, 'footer_service_pages':len(service_pages), 'footer_industry_pages':len(industry_pages), 'html_and_heading_hierarchy':'passed', 'internal_references':link_count, 'clean_page_urls':'passed', 'legacy_fragment_targets':'preserved', 'independent_word_counts':'matched', 'primary_keyword_pages_at_exactly_2_percent':target_count, 'external_links':sorted(external_links)}, indent=2))
 
 
 if __name__ == '__main__':

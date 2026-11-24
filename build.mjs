@@ -18,6 +18,7 @@ import { countPageWords, seoOverrides } from './page-limits.mjs';
 import { web3formsAccessKey } from './form-config.mjs';
 import { prepareEditorialPage, countEditorialWords, editorialWordTokens } from './editorial-pages.mjs';
 import { keywordMetrics } from './editorial-keywords.mjs';
+import { cleanPageReferences, publicPagePath, siteOrigin } from './routes.mjs';
 
 const allServices = [...coreServices, ...specialistServices, ...developmentServices];
 const services = [...allServices.filter(service=>service.id==='accounting-bookkeeping'), ...allServices.filter(service=>service.id!=='accounting-bookkeeping')];
@@ -751,13 +752,11 @@ for(const [file,fallbackTitle,fallbackDescription,originalBody] of pages){
  const body = prepareEditorialPage(originalBody,file);
  const page=`<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="${siteName}: ${desc}"><meta property="og:site_name" content="${siteName}"><meta property="og:title" content="${title}"><meta property="og:description" content="${siteName}: ${desc}"><meta property="og:type" content="website"><meta property="og:url" content="https://assistlaneglobal.com/${file === 'index.html' ? '' : file}"><meta name="twitter:card" content="summary"><meta name="robots" content="${file === '404.html' ? 'noindex, nofollow' : 'index, follow'}"><link rel="canonical" href="https://assistlaneglobal.com/${file === 'index.html' ? '' : file}"><meta name="theme-color" content="#08162f">
+<meta name="description" content="${siteName}: ${desc}"><meta property="og:site_name" content="${siteName}"><meta property="og:title" content="${title}"><meta property="og:description" content="${siteName}: ${desc}"><meta property="og:type" content="website"><meta property="og:url" content="${siteOrigin}${publicPagePath(file)}"><meta name="twitter:card" content="summary"><meta name="robots" content="${file === '404.html' ? 'noindex, nofollow' : 'index, follow'}"><link rel="canonical" href="${siteOrigin}${publicPagePath(file)}"><meta name="theme-color" content="#08162f">
 <title>${title}</title>
 <link rel="icon" href="${mark}" type="image/svg+xml"><link rel="stylesheet" href="site.css?v=${styleVersion}"><script type="module" src="site.js?v=${scriptVersion}"></script></head>
 <body id="top">${header(file)}<main id="main" class="${file==='index.html'?'home-page':'content-page'}" tabindex="-1">${body}${invitation(file)}</main>${footer(file)}</body></html>`;
- const output = file==='404.html'?page
-  .replace(/(href|src)="(?![#/]|[a-z][a-z\d+.-]*:)([^"]+)"/gi,'$1="/$2"')
-  .replace(/srcset="([^"]+)"/g,(_, candidates)=>'srcset="'+candidates.split(', ').map(candidate=>'/'+candidate).join(', ')+'"'):page;
+ const output = cleanPageReferences(page);
  generatedPages.push({file,html:output,words:countPageWords(output),editorialWords:countEditorialWords(body),keyword:keywordMetrics(editorialWordTokens(body),file)});
 }
 const shortPages = generatedPages.filter(page=>page.editorialWords<1500);
@@ -774,9 +773,9 @@ await writeFile(new URL('mark.svg',dir),`<svg xmlns="http://www.w3.org/2000/svg"
 const publicPages = pages.filter(([file]) => file !== '404.html');
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${publicPages.map(([file]) => `  <url><loc>https://assistlaneglobal.com/${file === 'index.html' ? '' : file}</loc></url>`).join('\n')}
+${publicPages.map(([file]) => `  <url><loc>${siteOrigin}${publicPagePath(file)}</loc></url>`).join('\n')}
 </urlset>
 `;
 await writeFile(new URL('sitemap.xml',dir),sitemap);
-await writeFile(new URL('robots.txt',dir),'User-agent: *\nAllow: /\nDisallow: /404.html\nSitemap: https://assistlaneglobal.com/sitemap.xml\n');
+await writeFile(new URL('robots.txt',dir),'User-agent: *\nAllow: /\nDisallow: /404\nSitemap: https://assistlaneglobal.com/sitemap.xml\n');
 

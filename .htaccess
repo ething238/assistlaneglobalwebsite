@@ -1,14 +1,36 @@
 # AssistLane Global: serve the generated static site from /dist when the repository
 # is deployed as a whole into public_html.
-Options -Indexes
+Options -Indexes -MultiViews
 DirectoryIndex index.html
 RewriteEngine On
 
-# Keep explicit /dist URLs intact.
+# Redirect browser requests, not internal rewrites, to the public clean URL.
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{THE_REQUEST} \s/+(?:dist/)?index(?:\.html)?(?:[?\s]) [NC]
+RewriteRule ^(?:dist/)?index(?:\.html)?$ / [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{THE_REQUEST} \s/+(?:dist/)?[a-z0-9-]+\.html(?:[?\s]) [NC]
+RewriteCond %{DOCUMENT_ROOT}/dist/$1.html -f
+RewriteRule ^(?:dist/)?([a-z0-9-]+)\.html$ /$1 [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{THE_REQUEST} \s/+dist/[a-z0-9-]+(?:[/?\s]) [NC]
+RewriteCond %{DOCUMENT_ROOT}/dist/$1.html -f
+RewriteRule ^dist/([a-z0-9-]+)/?$ /$1 [R=301,L]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{DOCUMENT_ROOT}/dist/$1.html -f
+RewriteRule ^([a-z0-9-]+)/$ /$1 [R=301,L]
+
+# Keep explicit /dist assets and internal page rewrites intact.
 RewriteRule ^dist/ - [L]
 
 # Serve the generated homepage and page/assets from dist/.
 RewriteRule ^$ dist/index.html [L]
+RewriteCond %{DOCUMENT_ROOT}/dist/$1.html -f
+RewriteRule ^([a-z0-9-]+)$ dist/$1.html [L]
+
 RewriteCond %{DOCUMENT_ROOT}/dist/$1 -f [OR]
 RewriteCond %{DOCUMENT_ROOT}/dist/$1 -d
 RewriteRule ^(.+)$ dist/$1 [L]
