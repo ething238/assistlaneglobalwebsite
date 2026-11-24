@@ -1,15 +1,18 @@
-export const siteOrigin = 'https://assistlaneglobal.com';
+export const siteOrigin = 'https://www.assistlaneglobal.com';
 
 export function publicPagePath(file) {
   return file === 'index.html' ? '/' : '/' + file.replace(/\.html$/, '');
 }
 
 export function cleanLocalReference(reference) {
-  if (!reference || reference.startsWith('#') || reference.startsWith('//')) return reference;
-  const absolute = /^[a-z][a-z\d+.-]*:/i.test(reference);
-  if (absolute && !/^https?:/i.test(reference)) return reference;
+  if (!reference || reference.startsWith('#')) return reference;
+  const absolute = /^[a-z][a-z\d+.-]*:/i.test(reference) || reference.startsWith('//');
+  if (absolute && !/^https?:/i.test(reference) && !reference.startsWith('//')) return reference;
   const url = new URL(reference, siteOrigin + '/');
   if (!['assistlaneglobal.com', 'www.assistlaneglobal.com'].includes(url.hostname)) return reference;
+  url.protocol = 'https:';
+  url.hostname = 'www.assistlaneglobal.com';
+  url.port = '';
   if (url.pathname === '/index.html') url.pathname = '/';
   else url.pathname = url.pathname.replace(/\.html$/, '');
   return absolute ? url.href : url.pathname + url.search + url.hash;

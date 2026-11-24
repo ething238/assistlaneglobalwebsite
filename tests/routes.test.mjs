@@ -12,8 +12,10 @@ test('the homepage and named pages have extensionless public paths', () => {
 test('page links keep query parameters and fragment targets', () => {
   assert.equal(cleanLocalReference('contact.html?utm_source=menu#contact-form'), '/contact?utm_source=menu#contact-form');
   assert.equal(cleanLocalReference('/index.html?ref=home#main'), '/?ref=home#main');
-  assert.equal(cleanLocalReference('https://assistlaneglobal.com/trust.html#access'), 'https://assistlaneglobal.com/trust#access');
+  assert.equal(cleanLocalReference('https://assistlaneglobal.com/trust.html#access'), 'https://www.assistlaneglobal.com/trust#access');
   assert.equal(cleanLocalReference('https://www.assistlaneglobal.com/about.html'), 'https://www.assistlaneglobal.com/about');
+  assert.equal(cleanLocalReference('http://assistlaneglobal.com/about.html?ref=old#founder'), 'https://www.assistlaneglobal.com/about?ref=old#founder');
+  assert.equal(cleanLocalReference('//assistlaneglobal.com/about.html'), 'https://www.assistlaneglobal.com/about');
 });
 
 test('assets use root paths and keep their extensions and cache versions', () => {
@@ -39,7 +41,7 @@ test('every built page uses a clean canonical URL and clean local page links', a
   const {pages} = JSON.parse(await readFile(new URL('../dist/word-counts.json', import.meta.url)));
   for (const {file} of pages) {
     const html = await readFile(new URL('../dist/' + file, import.meta.url), 'utf8');
-    const expected = file === 'index.html' ? 'https://assistlaneglobal.com/' : 'https://assistlaneglobal.com/' + file.slice(0, -5);
+    const expected = file === 'index.html' ? 'https://www.assistlaneglobal.com/' : 'https://www.assistlaneglobal.com/' + file.slice(0, -5);
     assert.ok(html.includes(`<link rel="canonical" href="${expected}">`), file);
     assert.ok(!/href="(?:\/|https?:\/\/(?:www\.)?assistlaneglobal\.com\/)[^"]*\.html(?:[?#][^"]*)?"/.test(html), file);
   }
