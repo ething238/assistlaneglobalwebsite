@@ -4,6 +4,13 @@ DirectoryIndex index.html
 ErrorDocument 404 /404.html
 RewriteEngine On
 
+# BEGIN generated legacy dist aliases
+RewriteCond %{THE_REQUEST} \s+(?:https?://[^/\s]+)?/+(?:dist/)+index\.html(?:[?\s]) [NC]
+RewriteRule ^ https://www.assistlaneglobal.com/ [R=301,L]
+RewriteCond %{THE_REQUEST} \s+(?:https?://[^/\s]+)?/+(?:dist/)+(services|accounting-bookkeeping|administrative-support|customer-support|crm-lead-operations|marketing-content|seo-wordpress|research-data-support|recruiting-people-operations|workflow-automation|ecommerce-operations|mobile-app-development|website-development|industries|industry-finance|industry-real-estate|industry-ecommerce|industry-agencies-publications|industry-ai-technology|industry-professional-services|industry-healthcare|industry-legal|industry-construction-field-services|industry-nonprofits-membership|industry-startups-small-business|how-it-works|about|trust|contact|privacy-policy|404)\.html(?:[?\s]) [NC]
+RewriteRule ^ https://www.assistlaneglobal.com/%1 [R=301,L]
+# END generated legacy dist aliases
+
 # THE_REQUEST prevents a clean URL's internal .html rewrite from redirecting again.
 RewriteCond %{ENV:REDIRECT_STATUS} ^$
 RewriteCond %{THE_REQUEST} \s/+(?:dist/)?index(?:\.html)?(?:[?\s]) [NC]
