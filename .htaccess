@@ -9,9 +9,10 @@ RewriteCond %{ENV:REDIRECT_STATUS} ^$
 RewriteCond %{THE_REQUEST} \s/+(?:dist/)?index(?:\.html)?(?:[?\s]) [NC]
 RewriteRule ^(?:dist/)?index(?:\.html)?$ / [R=301,L]
 
+# Check the requested filename, not a subsequent internal 404 document.
 RewriteCond %{ENV:REDIRECT_STATUS} ^$
-RewriteCond %{THE_REQUEST} \s/+(?:dist/)?[a-z0-9-]+\.html(?:[?\s]) [NC]
-RewriteCond %{DOCUMENT_ROOT}/dist/$1.html -f
+RewriteCond %{THE_REQUEST} \s/+(?:dist/)?([a-z0-9-]+)\.html(?:[?\s]) [NC]
+RewriteCond %{DOCUMENT_ROOT}/dist/%1.html -f
 RewriteRule ^(?:dist/)?([a-z0-9-]+)\.html$ /$1 [R=301,L]
 
 RewriteCond %{ENV:REDIRECT_STATUS} ^$
