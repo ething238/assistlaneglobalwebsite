@@ -766,6 +766,26 @@ if (oversizedPages.length) throw new Error('Pages exceed the 2,000-word limit: '
 const densityFailures=generatedPages.filter(page=>page.keyword.keyword && Math.abs(page.keyword.wordCoveragePercent-2)>0.000001);
 if(densityFailures.length) throw new Error('Primary keyword coverage must be 2%: '+densityFailures.map(page=>`${page.file} (${page.keyword.wordCoveragePercent.toFixed(4)}%)`).join(', '));
 for (const page of generatedPages) await writeFile(new URL(page.file,dir),page.html);
+// Redirect externally requested repository-folder aliases without relying on
+// filesystem paths that differ between the two supported deployment layouts.
+const aliasNames = generatedPages.filter(page=>page.file!=='index.html').map(page=>page.file.slice(0,-5)).join('|');
+const distAliasRules = [
+ '# BEGIN generated legacy dist aliases',
+ String.raw`RewriteCond %{THE_REQUEST} \s+(?:https?://[^/\s]+)?/+(?:dist/)+index\.html(?:[?\s]) [NC]`,
+ `RewriteRule ^ ${siteOrigin}/ [R=301,L]`,
+ String.raw`RewriteCond %{THE_REQUEST} \s+(?:https?://[^/\s]+)?/+(?:dist/)+(${aliasNames})\.html(?:[?\s]) [NC]`,
+ `RewriteRule ^ ${siteOrigin}/%1 [R=301,L]`,
+ '# END generated legacy dist aliases'
+].join('\n');
+for (const config of [new URL('.htaccess',import.meta.url),new URL('.htaccess',dir)]) {
+ let source = await readFile(config,'utf8');
+ if (source.includes('# BEGIN generated legacy dist aliases')) {
+  source = source.replace(/# BEGIN generated legacy dist aliases[\s\S]*?# END generated legacy dist aliases/,()=>distAliasRules);
+ } else {
+  source = source.replace('RewriteEngine On','RewriteEngine On\n\n'+distAliasRules);
+ }
+ await writeFile(config,source);
+}
 await writeFile(new URL('word-counts.json',dir),JSON.stringify({minimumEditorialWords:1500,maximumTotalWords:2000,editorialScope:'Page content, including expandable examples and FAQ answers; excludes header, footer, shared footer CTA, form fields and page navigation.',pages:generatedPages.map(({file,words,editorialWords})=>({file,words,editorialWords}))},null,2)+'\n');
 await writeFile(new URL('keyword-density.json',dir),JSON.stringify({targetWordCoveragePercent:2,formula:'Exact primary-phrase mentions × phrase word count ÷ editorial word count × 100',scope:'Editorial page content, including expandable guidance. Excludes header, footer, shared footer CTA, forms and page navigation.',selection:'Existing first keyword in pageSEO or specialistPageSEO. Pages without a configured primary keyword are reported as not applicable.',pages:generatedPages.map(page=>page.keyword)},null,2)+'\n');
 console.log(`Built ${generatedPages.length} pages; editorial range ${Math.min(...generatedPages.map(page=>page.editorialWords))}–${Math.max(...generatedPages.map(page=>page.editorialWords))}; maximum ${Math.max(...generatedPages.map(page=>page.words))} total words per page.`);

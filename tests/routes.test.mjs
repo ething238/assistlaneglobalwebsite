@@ -46,3 +46,23 @@ test('every built page uses a clean canonical URL and clean local page links', a
     assert.ok(!/href="(?:\/|https?:\/\/(?:www\.)?assistlaneglobal\.com\/)[^"]*\.html(?:[?#][^"]*)?"/.test(html), file);
   }
 });
+
+test('repository-folder aliases redirect only externally requested, existing pages', async () => {
+  const {pages} = JSON.parse(await readFile(new URL('../dist/word-counts.json', import.meta.url)));
+  for (const name of ['../.htaccess','../dist/.htaccess']) {
+    const config = await readFile(new URL(name,import.meta.url),'utf8');
+    const block = config.match(/# BEGIN generated legacy dist aliases([\s\S]*?)# END generated legacy dist aliases/)[1];
+    const patterns = [...block.matchAll(/RewriteCond %\{THE_REQUEST\} (.+) \[NC\]/g)].map(match=>new RegExp(match[1],'i'));
+    for (const {file} of pages) {
+      for (const prefix of ['/dist/','https://www.assistlaneglobal.com/dist/']) {
+        const matches = patterns.map(pattern=>pattern.exec(`GET ${prefix}${file}?ref=old HTTP/1.1`)).filter(Boolean);
+        assert.equal(matches.length,1, name+': '+file);
+        assert.equal(file==='index.html'?'':matches[0][1],file==='index.html'?'':file.slice(0,-5));
+      }
+      assert.ok(patterns.every(pattern=>!pattern.test(`GET /${file} HTTP/1.1`)), 'Normal page request must not trigger a dist redirect');
+    }
+    for (const request of ['GET /dist/pricing.html HTTP/1.1','GET /dist/unknown-page.html HTTP/1.1','GET /trust HTTP/1.1','GET /about?next=/dist/trust.html HTTP/1.1']) {
+      assert.ok(patterns.every(pattern=>!pattern.test(request)),request);
+    }
+  }
+});
