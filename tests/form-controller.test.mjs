@@ -23,6 +23,8 @@ function element(value='') {
     setCustomValidity(message){this.customValidity=message;}};
 }
 
+const expectedPublicPath = file => file==='index.html' ? '/' : file==='contact.html' ? '/contact-us' : '/'+file.slice(0,-5);
+
 function harness(page=pages[0], send=async()=>{}) {
   const fields=new Map();
   for(const match of page.form.matchAll(/<(input|textarea|select)\b([^>]*)(?:>([\s\S]*?)<\/\1>)?/g)) {
@@ -53,7 +55,7 @@ function harness(page=pages[0], send=async()=>{}) {
   };
   runInNewContext(controller,{
     document:{querySelector:()=>null,querySelectorAll:selector=>selector==='[data-enquiry-form]'?[form]:[],addEventListener(){}},
-    window:{addEventListener(){},location:{origin:'https://www.assistlaneglobal.com',pathname:page.file==='index.html'?'/':'/'+page.file.slice(0,-5),search:'?utm_source=quality-check&unrelated=ignored',hash:''}},
+    window:{addEventListener(){},location:{origin:'https://www.assistlaneglobal.com',pathname:expectedPublicPath(page.file),search:'?utm_source=quality-check&unrelated=ignored',hash:''}},
     matchMedia:()=>({matches:true,addEventListener(){}}),URLSearchParams,
     FormData:class {constructor(){return Array.from(fields,([name,input])=>[name,input.value]);}},
     sendEnquiry:async(payload,key)=>{calls.push({payload,key});return send(payload,key);}
@@ -71,7 +73,7 @@ for(const page of pages) test(`${page.file}: sends the configured form, source a
   assert.equal(h.calls.length,1);
   assert.equal(h.calls[0].key,h.fields.get('access_key').value);
   assert.equal(h.calls[0].payload.consent,'agreed');
-  assert.equal(h.calls[0].payload.source_page,'https://www.assistlaneglobal.com'+(page.file==='index.html'?'/':'/'+page.file.slice(0,-5)));
+  assert.equal(h.calls[0].payload.source_page,'https://www.assistlaneglobal.com'+expectedPublicPath(page.file));
   assert.equal(h.calls[0].payload.utm_source,'quality-check');
   assert.ok(!('unrelated' in h.calls[0].payload));
   assert.equal(h.form.resetCount,1);

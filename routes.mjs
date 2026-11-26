@@ -1,6 +1,7 @@
 export const siteOrigin = 'https://www.assistlaneglobal.com';
 
 export function publicPagePath(file) {
+  if (file === 'contact.html') return '/contact-us';
   return file === 'index.html' ? '/' : '/' + file.replace(/\.html$/, '');
 }
 
@@ -15,6 +16,7 @@ export function cleanLocalReference(reference) {
   url.port = '';
   if (url.pathname === '/index.html') url.pathname = '/';
   else url.pathname = url.pathname.replace(/\.html$/, '');
+  if (url.pathname === '/contact' || url.pathname === '/contact/') url.pathname = '/contact-us';
   return absolute ? url.href : url.pathname + url.search + url.hash;
 }
 

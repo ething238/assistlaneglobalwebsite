@@ -10,6 +10,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from preview import DIST, PreviewHandler, ThreadingHTTPServer
 
 
+def public_path(file):
+    if file == 'contact.html':
+        return '/contact-us'
+    return '/' if file == 'index.html' else '/' + file[:-5]
+
+
 class CleanURLs(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -38,7 +44,7 @@ class CleanURLs(unittest.TestCase):
         self.assertEqual(len(self.pages), 32)
         for page in self.pages:
             with self.subTest(page=page['file']):
-                path = '/' if page['file'] == 'index.html' else '/' + page['file'][:-5]
+                path = public_path(page['file'])
                 status, headers, content = self.request(path)
                 self.assertEqual(status, 200)
                 self.assertIn('text/html', headers['Content-type'])
@@ -49,7 +55,7 @@ class CleanURLs(unittest.TestCase):
 
     def test_all_old_page_urls_redirect_permanently_and_keep_the_query(self):
         for page in self.pages:
-            path = '/' if page['file'] == 'index.html' else '/' + page['file'][:-5]
+            path = public_path(page['file'])
             for prefix in ['/', '/dist/']:
                 with self.subTest(page=page['file'], prefix=prefix):
                     status, headers, _ = self.request(prefix + page['file'] + '?utm_source=old-link')
@@ -60,10 +66,22 @@ class CleanURLs(unittest.TestCase):
         for page in self.pages:
             if page['file'] == 'index.html':
                 continue
-            path = '/' + page['file'][:-5]
+            path = public_path(page['file'])
             status, headers, _ = self.request(path + '/')
             self.assertEqual(status, 301)
             self.assertEqual(headers['Location'], path)
+
+    def test_contact_aliases_keep_the_query_and_point_directly_to_contact_us(self):
+        for path in ['/contact', '/contact/', '/contact.html', '/contact-us/', '/contact-us.html',
+                     '/dist/contact', '/dist/contact/', '/dist/contact.html', '/dist/contact-us', '/dist/contact-us.html']:
+            for method in ['GET', 'HEAD']:
+                with self.subTest(path=path, method=method):
+                    status, headers, _ = self.request(path + '?utm_source=old&next=%2Fabout', method)
+                    self.assertEqual(status, 301)
+                    self.assertEqual(headers['Location'], '/contact-us?utm_source=old&next=%2Fabout')
+        status, _, content = self.request('/contact-us?next=/contact.html')
+        self.assertEqual(status, 200)
+        self.assertIn(b'id="contact-form"', content)
 
     def test_assets_keep_working(self):
         for path in ['/site.css?v=123', '/site.js?v=123', '/form-delivery.js', '/records-720.webp', '/mark.svg', '/sitemap.xml', '/robots.txt']:

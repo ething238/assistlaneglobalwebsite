@@ -11,6 +11,8 @@ ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / 'dist'
 ORIGIN = 'https://www.assistlaneglobal.com/'
 def public_path(file):
+    if file == 'contact.html':
+        return '/contact-us'
     return '/' if file == 'index.html' else '/' + file.removesuffix('.html')
 
 WORDS = re.compile(r"[^\W_]+(?:[’'@.+-][^\W_]+)*", re.UNICODE)
@@ -187,6 +189,9 @@ def main():
                 path = unquote(parts.path).lstrip('/') or 'index.html'
                 if node.tag == 'a':
                     assert not parts.path.endswith('.html'), (file, reference, 'Page link is not clean')
+                    assert parts.path not in {'/contact', '/contact/'}, (file, reference, 'Old contact page link')
+                if path == 'contact-us':
+                    path = 'contact.html'
                 if '.' not in path and path + '.html' in docs:
                     path += '.html'
                 target = (DIST / path).resolve()
