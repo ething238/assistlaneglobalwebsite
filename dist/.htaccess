@@ -7,9 +7,16 @@ RewriteEngine On
 # BEGIN generated legacy dist aliases
 RewriteCond %{THE_REQUEST} \s+(?:https?://[^/\s]+)?/+(?:dist/)+index\.html(?:[?\s]) [NC]
 RewriteRule ^ https://www.assistlaneglobal.com/ [R=301,L]
-RewriteCond %{THE_REQUEST} \s+(?:https?://[^/\s]+)?/+(?:dist/)+(services|accounting-bookkeeping|administrative-support|customer-support|crm-lead-operations|marketing-content|seo-wordpress|research-data-support|recruiting-people-operations|workflow-automation|ecommerce-operations|mobile-app-development|website-development|industries|industry-finance|industry-real-estate|industry-ecommerce|industry-agencies-publications|industry-ai-technology|industry-professional-services|industry-healthcare|industry-legal|industry-construction-field-services|industry-nonprofits-membership|industry-startups-small-business|how-it-works|about|trust|contact|privacy-policy|404)\.html(?:[?\s]) [NC]
+RewriteCond %{THE_REQUEST} \s+(?:https?://[^/\s]+)?/+(?:dist/)+(contact)\.html(?:[?\s]) [NC]
+RewriteRule ^ https://www.assistlaneglobal.com/contact-us [R=301,L]
+RewriteCond %{THE_REQUEST} \s+(?:https?://[^/\s]+)?/+(?:dist/)+(services|accounting-bookkeeping|administrative-support|customer-support|crm-lead-operations|marketing-content|seo-wordpress|research-data-support|recruiting-people-operations|workflow-automation|ecommerce-operations|mobile-app-development|website-development|industries|industry-finance|industry-real-estate|industry-ecommerce|industry-agencies-publications|industry-ai-technology|industry-professional-services|industry-healthcare|industry-legal|industry-construction-field-services|industry-nonprofits-membership|industry-startups-small-business|how-it-works|about|trust|privacy-policy|404)\.html(?:[?\s]) [NC]
 RewriteRule ^ https://www.assistlaneglobal.com/%1 [R=301,L]
 # END generated legacy dist aliases
+
+# Preserve contact links after renaming the public page. THE_REQUEST excludes
+# the internal rewrite of /contact-us to its existing contact.html file.
+RewriteCond %{THE_REQUEST} \s+(?:https?://[^/\s]+)?/+(?:(?:dist/)*(?:contact(?:\.html|/)?|contact-us(?:\.html|/))|(?:dist/)+contact-us)(?:[?\s]) [NC]
+RewriteRule ^ https://www.assistlaneglobal.com/contact-us [R=301,L]
 
 # THE_REQUEST prevents a clean URL's internal .html rewrite from redirecting again.
 RewriteCond %{ENV:REDIRECT_STATUS} ^$
@@ -30,6 +37,7 @@ RewriteCond %{HTTP_HOST} ^assistlaneglobal\.com(?::[0-9]+)?$ [NC]
 RewriteRule ^ https://www.assistlaneglobal.com%{REQUEST_URI} [R=301,L,NE]
 
 # Serve the existing file while keeping the browser URL extensionless.
+RewriteRule ^contact-us$ contact.html [L]
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^([a-z0-9-]+)$ $1.html [L]

@@ -20,7 +20,7 @@ Before a public launch, confirm service scopes, specialist availability and deli
 
 The preferred website address is `https://www.assistlaneglobal.com`. Non-www requests permanently redirect to the www host with their path and query intact. Existing HTML addresses redirect directly to the clean www address. Canonical tags, Open Graph URLs, sitemap and robots directives use the same preferred host.
 
-Public pages use paths such as `/about`, `/services`, `/industry-real-estate` and `/trust`; the homepage uses `/`. The generated `.html` filenames remain internal files. All rendered links, canonical tags, Open Graph URLs and the sitemap use clean public paths.
+Public pages use paths such as `/about`, `/services`, `/industry-real-estate`, `/trust` and `/contact-us`; the homepage uses `/`. The contact page's former `/contact` and `/contact.html` addresses permanently redirect to `/contact-us`. Its generated file remains `dist/contact.html`. All rendered links, canonical tags, Open Graph URLs and the sitemap use clean public paths.
 
 Both `.htaccess` files support extensionless pages and permanent redirects from old `.html` links, while preserving query parameters and fragment targets. The root configuration serves `dist/` when the whole repository is deployed. `dist/.htaccess` supports deployments where `dist/` itself is the document root. Include the applicable hidden `.htaccess` file when publishing. The hosting deployment must use the latest GitHub version for these routes to become live.
 

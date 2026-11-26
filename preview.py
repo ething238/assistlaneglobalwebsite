@@ -29,12 +29,13 @@ class PreviewHandler(SimpleHTTPRequestHandler):
             self.path = '/index.html'
             return True
         match = re.fullmatch(r'/([a-z0-9-]+)(\.html|/)?', local)
-        if match and (DIST / (match[1] + '.html')).is_file():
-            canonical = '/' if match[1] == 'index' else '/' + match[1]
+        filename = 'contact' if match and match[1] == 'contact-us' else match[1] if match else None
+        if filename and (DIST / (filename + '.html')).is_file():
+            canonical = '/' if filename == 'index' else '/contact-us' if filename == 'contact' else '/' + filename
             if path != canonical:
                 self.redirect(canonical, parts.query)
                 return False
-            self.path = '/' + match[1] + '.html'
+            self.path = '/' + filename + '.html'
             return True
         self.path = local + ('?' + parts.query if parts.query else '')
         return True

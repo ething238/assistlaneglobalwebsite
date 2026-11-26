@@ -768,11 +768,13 @@ if(densityFailures.length) throw new Error('Primary keyword coverage must be 2%:
 for (const page of generatedPages) await writeFile(new URL(page.file,dir),page.html);
 // Redirect externally requested repository-folder aliases without relying on
 // filesystem paths that differ between the two supported deployment layouts.
-const aliasNames = generatedPages.filter(page=>page.file!=='index.html').map(page=>page.file.slice(0,-5)).join('|');
+const aliasNames = generatedPages.filter(page=>!['index.html','contact.html'].includes(page.file)).map(page=>page.file.slice(0,-5)).join('|');
 const distAliasRules = [
  '# BEGIN generated legacy dist aliases',
  String.raw`RewriteCond %{THE_REQUEST} \s+(?:https?://[^/\s]+)?/+(?:dist/)+index\.html(?:[?\s]) [NC]`,
  `RewriteRule ^ ${siteOrigin}/ [R=301,L]`,
+ String.raw`RewriteCond %{THE_REQUEST} \s+(?:https?://[^/\s]+)?/+(?:dist/)+(contact)\.html(?:[?\s]) [NC]`,
+ `RewriteRule ^ ${siteOrigin}${publicPagePath('contact.html')} [R=301,L]`,
  String.raw`RewriteCond %{THE_REQUEST} \s+(?:https?://[^/\s]+)?/+(?:dist/)+(${aliasNames})\.html(?:[?\s]) [NC]`,
  `RewriteRule ^ ${siteOrigin}/%1 [R=301,L]`,
  '# END generated legacy dist aliases'
