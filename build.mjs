@@ -300,7 +300,7 @@ const footer=(page)=>`<footer class="site-footer" id="site-footer"><div class="w
  </nav>
  <nav class="footer-column footer-company" aria-label="Company">
   <p class="footer-title">Company</p>
-  <div class="footer-links">${nav('about.html','About us',page)}${nav('how-it-works.html','Our Process',page)}${nav('industries.html','Industries',page)}${nav('trust.html','Trust and Security',page)}${nav(privacyPolicyUrl,'Privacy Policy',page)}</div>
+  <div class="footer-links">${nav('index.html','Home',page)}${nav('about.html','About us',page)}${nav('how-it-works.html','Our Process',page)}${nav('trust.html','Trust and Security',page)}${nav(privacyPolicyUrl,'Privacy Policy',page)}</div>
  </nav>
  </div><div class="footer-utility">
   ${link(enquiryPageUrl,enquiryLabel,'footer-action')}

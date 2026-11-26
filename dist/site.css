@@ -655,7 +655,7 @@ main .card-heading{gap:0}
 .footer-grid{grid-template-columns:minmax(0,1.25fr) minmax(0,1.1fr) minmax(0,1.1fr) minmax(0,.8fr);gap:clamp(24px,3vw,48px)}
 @media(max-width:1023px){.footer-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}.footer-brand{grid-column:1/-1}}
 @media(max-width:767px){.industry-overview{grid-template-columns:1fr}.industry-overview .editorial-image{justify-self:start;width:100%}.faq-content>.section-intro{margin-bottom:20px}}
-@media(max-width:600px){.footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 20px}.footer-company{grid-column:1/-1}.footer-company .footer-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 20px}}
+@media(max-width:600px){.footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 20px}.footer-company{grid-column:1/-1}.footer-company .footer-links{display:grid;grid-template-columns:1fr;gap:8px}}
 
 /* Both dropdowns show their complete directory with a graphic for each entry. */
 .navigation .menu-panel{padding:16px;border-radius:10px}
